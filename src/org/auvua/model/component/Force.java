@@ -2,6 +2,8 @@ package org.auvua.model.component;
 
 import javax.vecmath.Vector3d;
 
+import org.auvua.model.motion.Kinematics;
+
 public class Force extends PhysicsObject2 {
   
   private Vector3d force;

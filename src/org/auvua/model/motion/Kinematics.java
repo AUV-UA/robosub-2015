@@ -1,4 +1,4 @@
-package org.auvua.model.component;
+package org.auvua.model.motion;
 
 import javax.media.j3d.Transform3D;
 import javax.vecmath.AxisAngle4d;
@@ -14,9 +14,7 @@ public class Kinematics {
   public final Vector3d angAccel = new Vector3d();
   public final Vector3d angVel = new Vector3d();
   
-  public final Vector3d localX = new Vector3d(1,0,0);
-  public final Vector3d localY = new Vector3d(0,1,0);
-  public final Vector3d localZ = new Vector3d(0,0,1);
+  public final Orientation orientation = new Orientation();
   
   private double lastTime = Timer.getInstance().get();
   
@@ -40,21 +38,12 @@ public class Kinematics {
     angVel.scaleAdd(dt, angAccel, angVel);
     Vector3d dAngPos = new Vector3d(angVel);
     dAngPos.scale(dt);
-    rotate(new AxisAngle4d(dAngPos, dAngPos.length()));
+    orientation.rotate(new AxisAngle4d(dAngPos, dAngPos.length()));
     
     lastTime = time;
   }
   
   public void translate(Vector3d vector) {
     pos.add(vector);
-  }
-  
-  public void rotate(AxisAngle4d aa) {
-    Transform3D trans = new Transform3D();
-    trans.setRotation(aa);
-    
-    trans.transform(localX);
-    trans.transform(localY);
-    trans.transform(localZ);
   }
 }

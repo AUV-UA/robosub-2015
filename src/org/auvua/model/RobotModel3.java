@@ -9,10 +9,10 @@ import org.auvua.agent.control.RateLimiter;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.signal.FirstOrderSystem;
 import org.auvua.agent.signal.Integrator;
-import org.auvua.model.component.Kinematics;
 import org.auvua.model.component.PhysicsRobot;
 import org.auvua.model.component.RobotFactory;
 import org.auvua.model.component.RobotFactory.RobotType;
+import org.auvua.model.motion.Kinematics;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 import org.auvua.reactive.core.Triggerable;
@@ -65,17 +65,17 @@ public class RobotModel3 implements Controllable, Triggerable {
   
   public RxVar<Double> gyroRateX = new FirstOrderSystem(R.var(() -> {
     PhysicsRobot robot = physicsRobot.get();
-    return robot.kinematics.localX.dot(robot.kinematics.angVel);
+    return robot.kinematics.orientation.localX.dot(robot.kinematics.angVel);
   }), 5);
   
   public RxVar<Double> gyroRateY = new FirstOrderSystem(R.var(() -> {
     PhysicsRobot robot = physicsRobot.get();
-    return robot.kinematics.localY.dot(robot.kinematics.angVel);
+    return robot.kinematics.orientation.localY.dot(robot.kinematics.angVel);
   }), 5);
   
   public RxVar<Double> gyroRateZ = new FirstOrderSystem(R.var(() -> {
     PhysicsRobot robot = physicsRobot.get();
-    return robot.kinematics.localZ.dot(robot.kinematics.angVel);
+    return robot.kinematics.orientation.localZ.dot(robot.kinematics.angVel);
   }), 5);
   
   public RobotModel3() {

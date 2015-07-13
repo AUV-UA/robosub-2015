@@ -2,6 +2,8 @@ package org.auvua.model.component;
 
 import javax.vecmath.Vector3d;
 
+import org.auvua.model.motion.Kinematics;
+
 public class Thruster extends PhysicsObject2 {
   
   private double thrust = 0;
@@ -9,7 +11,7 @@ public class Thruster extends PhysicsObject2 {
   
   public Thruster(Vector3d location) {
     super(new Kinematics(location));
-    forceDirection = kinematics.localY;
+    forceDirection = kinematics.orientation.localY;
   }
 
   public Vector3d getForce() {

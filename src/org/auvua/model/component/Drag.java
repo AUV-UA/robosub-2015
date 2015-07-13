@@ -3,6 +3,8 @@ package org.auvua.model.component;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
+import org.auvua.model.motion.Kinematics;
+
 public class Drag {
   
   public Vector3d transDrag = new Vector3d();
@@ -18,10 +20,9 @@ public class Drag {
   }
   
   public void update() {
-    Matrix3d globalToLocal = new Matrix3d();
-    globalToLocal.setRow(0, kinematics.localX);
-    globalToLocal.setRow(1, kinematics.localY);
-    globalToLocal.setRow(2, kinematics.localZ);
+    Matrix3d localToGlobal = kinematics.orientation.asMatrix();
+    Matrix3d globalToLocal = new Matrix3d(localToGlobal);
+    globalToLocal.transpose();
     
     Vector3d orientedVel = new Vector3d();
     globalToLocal.transform(kinematics.vel, orientedVel);
@@ -40,12 +41,8 @@ public class Drag {
     localRotDrag.y = -Math.abs(orientedAngVel.y) * orientedAngVel.y * rotCoeff.y;
     localRotDrag.z = -Math.abs(orientedAngVel.z) * orientedAngVel.z * rotCoeff.z;
     
-    Matrix3d transform = new Matrix3d();
-    transform.setColumn(0, kinematics.localX);
-    transform.setColumn(1, kinematics.localY);
-    transform.setColumn(2, kinematics.localZ);
-    transform.transform(localTransDrag, transDrag);
-    transform.transform(localRotDrag, rotDrag);
+    localToGlobal.transform(localTransDrag, transDrag);
+    localToGlobal.transform(localRotDrag, rotDrag);
   }
   
 }

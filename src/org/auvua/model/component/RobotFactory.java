@@ -3,6 +3,8 @@ package org.auvua.model.component;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
+import org.auvua.model.motion.Kinematics;
+
 public class RobotFactory {
   
   public static PhysicsRobot build(RobotType type) {

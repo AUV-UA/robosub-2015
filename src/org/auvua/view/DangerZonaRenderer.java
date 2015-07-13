@@ -12,23 +12,23 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import org.auvua.model.component.PhysicsRobot;
+import org.auvua.model.dangerZona.DangerZonaPhysicsModel;
 
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
-public class PhysicsRobotRenderer {
+public class DangerZonaRenderer {
   
   private TransformGroup objTrans;
   private Transform3D trans;
   public SimpleUniverse universe;
-  private PhysicsRobot robot;
+  private DangerZonaPhysicsModel robot;
   public Transform3D viewTrans;
   public Vector3d cameraPos = new Vector3d(1000.0, -1000.0, 1000.0);
   
-  public PhysicsRobotRenderer(PhysicsRobot robot) {
+  public DangerZonaRenderer(DangerZonaPhysicsModel robot) {
     this.robot = robot;
     
     universe = new SimpleUniverse();

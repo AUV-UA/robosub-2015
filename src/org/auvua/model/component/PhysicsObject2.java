@@ -9,6 +9,7 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.Timer;
+import org.auvua.model.motion.Kinematics;
 
 public abstract class PhysicsObject2 {
   
@@ -40,10 +41,7 @@ public abstract class PhysicsObject2 {
     child.parent = this;
     Vector3d toChild = new Vector3d();
     
-    Matrix3d transform = new Matrix3d();
-    transform.setColumn(0, kinematics.localX);
-    transform.setColumn(1, kinematics.localY);
-    transform.setColumn(2, kinematics.localZ);
+    Matrix3d transform = kinematics.orientation.asMatrix();
     transform.transform(child.kinematics.pos, toChild);
     
     child.locationFromParent = toChild;
@@ -63,12 +61,10 @@ public abstract class PhysicsObject2 {
   }
   
   public void rotate(AxisAngle4d aa) {
+    kinematics.orientation.rotate(aa);
+    
     Transform3D trans = new Transform3D();
     trans.setRotation(aa);
-    
-    trans.transform(kinematics.localX);
-    trans.transform(kinematics.localY);
-    trans.transform(kinematics.localZ);
     if (locationFromParent != null) {
       trans.transform(locationFromParent);
     }

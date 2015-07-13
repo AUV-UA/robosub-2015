@@ -1,11 +1,16 @@
-package org.auvua.model.component;
+package org.auvua.model.dangerZona;
 
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Vector3d;
 
+import org.auvua.model.component.Drag;
+import org.auvua.model.component.Force;
+import org.auvua.model.component.MassProperties;
+import org.auvua.model.component.PhysicsObject2;
+import org.auvua.model.component.Thruster;
 import org.auvua.model.motion.Kinematics;
 
-public class PhysicsRobot extends PhysicsObject2 {
+public class DangerZonaPhysicsModel extends PhysicsObject2 {
   
   public Thruster t1 = new Thruster(new Vector3d(8.5, 10.5, 0));
   public Thruster t2 = new Thruster(new Vector3d(-8.5, 10.5, 0));
@@ -17,7 +22,7 @@ public class PhysicsRobot extends PhysicsObject2 {
   public Thruster t7 = new Thruster(new Vector3d(-5.75, -8.5, 4));
   public Thruster t8 = new Thruster(new Vector3d(5.75, -8.5, 4));
 
-  public PhysicsRobot(Kinematics kinematics, MassProperties massProperties, Drag drag) {
+  public DangerZonaPhysicsModel(Kinematics kinematics, MassProperties massProperties, Drag drag) {
     super(kinematics, massProperties, drag);
     this.buildChildren();
   }
@@ -33,12 +38,10 @@ public class PhysicsRobot extends PhysicsObject2 {
     t7.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     t8.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     
-    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 4.0), new Vector3d(0.0, 0.0, 10000.0));
+    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 4.0), new Vector3d(0.0, 0.0, 12000.0));
     Force gravity = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, -10000.0));
     
     addChildren(t1, t2, t3, t4, t5, t6, t7, t8, buoyancy, gravity);
   }
-  
-  
 
 }
