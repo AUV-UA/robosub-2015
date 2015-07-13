@@ -66,8 +66,6 @@ public class DangerZonaOrientationRenderer {
   
   public void update() {
     Matrix3d rotation = robot.calcKinematics.get().orientation.asMatrix();
-    
-    trans.setTranslation(robot.calcKinematics.get().pos);
     trans.setRotation(rotation);
     objTrans.setTransform(trans);
   }

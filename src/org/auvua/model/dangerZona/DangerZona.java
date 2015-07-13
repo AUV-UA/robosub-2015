@@ -23,6 +23,7 @@ public class DangerZona {
       localAngVel.z = hardware.getOutputs().gyroRateZ.get();
       
       orientationMatrix.transform(localAngVel, ck.angVel);
+      ck.update();
     });
   }
   

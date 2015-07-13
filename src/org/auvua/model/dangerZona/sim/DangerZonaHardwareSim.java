@@ -62,30 +62,30 @@ public class DangerZonaHardwareSim implements DangerZonaHardware {
   private void createSensors() {
     outputs.depthSensor = new FirstOrderSystem(R.var(() -> {
       return -physicsModel.get().kinematics.pos.z;
-    }), 5);
+    }), 10);
     
     outputs.gyroRateX = new FirstOrderSystem(R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localX.dot(robot.kinematics.angVel);
-    }), 5);
+    }), 10);
     
     outputs.gyroRateY = new FirstOrderSystem(R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localY.dot(robot.kinematics.angVel);
-    }), 5);
+    }), 10);
     
     outputs.gyroRateZ = new FirstOrderSystem(R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localZ.dot(robot.kinematics.angVel);
-    }), 5);
+    }), 10);
     
     outputs.velocitySensor = new TwoVector(
         new FirstOrderSystem(R.var(() -> {
           return physicsModel.get().kinematics.vel.x;
-        }), 5),
+        }), 10),
         new FirstOrderSystem(R.var(() -> {
           return physicsModel.get().kinematics.vel.y;
-        }), 5));
+        }), 10));
     
     outputs.positionSensor = new TwoVector(
         new Integrator(R.var(() -> {
