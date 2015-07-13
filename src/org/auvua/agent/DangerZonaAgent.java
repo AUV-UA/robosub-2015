@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.DataRecorder;
 import org.auvua.agent.oi.OperatorInterface2;
@@ -15,6 +16,8 @@ import org.auvua.model.component.DangerZonaOutputs;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaFactory;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
+import org.auvua.model.dangerZona.sim.DangerZonaHardwareSim;
+import org.auvua.reactive.core.R;
 import org.auvua.view.DangerZonaOrientationRenderer;
 import org.auvua.view.RChart;
 
@@ -41,7 +44,7 @@ public class DangerZonaAgent {
         robot.update();
         or.update();
         try {
-          Thread.sleep(30);
+          Thread.sleep(10);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -73,6 +76,12 @@ public class DangerZonaAgent {
     chart.observe(outputs.gyroRateX, "Gyro Rate X");
     chart.observe(outputs.gyroRateY, "Gyro Rate Y");
     chart.observe(outputs.gyroRateZ, "Gyro Rate Z");
+    
+    chart.observe(R.var(() -> {
+      Vector3d calcRoll = robot.calcKinematics.get().orientation.localY;
+      Vector3d actualRoll = ((DangerZonaHardwareSim) robot.hardware).physicsModel.get().kinematics.orientation.localY;
+      return calcRoll.angle(actualRoll);
+    }), "Roll error");
     
     JFrame frame2 = new JFrame();
     frame2.setSize(new Dimension(800, 600));

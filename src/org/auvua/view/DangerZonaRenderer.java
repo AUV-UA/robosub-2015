@@ -43,12 +43,10 @@ public class DangerZonaRenderer {
     objTrans.addChild(new ColorCube(20.0));
 
     group.addChild(objTrans);
-    
-    //universe.getViewingPlatform().setNominalViewingTransform();
 
     viewTrans = new Transform3D();
     viewTrans.setTranslation(cameraPos);
-    /*
+    
     double s2 = 1.0 / Math.sqrt(2.0);
     double s3 = 1.0 / Math.sqrt(3.0);
     double s6 = 1.0 / Math.sqrt(6.0);
@@ -58,7 +56,7 @@ public class DangerZonaRenderer {
         s2, s6, -s3,
         0.0, s23, s3
     }));
-    */
+    
     universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
     universe.getViewer().getView().setBackClipDistance(10000.0f);
 
@@ -67,6 +65,7 @@ public class DangerZonaRenderer {
   }
   
   public void update() {
+    
     Vector3d viewZ = new Vector3d();
     viewZ.sub(cameraPos, robot.kinematics.pos);
     viewZ.normalize();

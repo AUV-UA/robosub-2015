@@ -42,6 +42,20 @@ public class DangerZonaHardwareSim implements DangerZonaHardware {
   public DangerZonaHardwareSim(DangerZonaPhysicsModel physicsModel) {
     this.physicsModel = R.var(physicsModel);
     r = new DangerZonaRenderer(physicsModel);
+    
+    this.physicsModel.setModifier((model) -> {
+      model.t1.setThrust(frontRight.get());
+      model.t2.setThrust(frontLeft.get());
+      model.t3.setThrust(rearLeft.get());
+      model.t4.setThrust(rearRight.get());
+      model.t5.setThrust(heaveFrontRight.get());
+      model.t6.setThrust(heaveFrontLeft.get());
+      model.t7.setThrust(heaveRearLeft.get());
+      model.t8.setThrust(heaveRearRight.get());
+      model.update();
+      r.update();
+    });
+    
     createSensors();
   }
 

@@ -81,6 +81,17 @@ public class RxVar<E> extends StandardDependency implements ReactiveVariable<E> 
     determineDependencies();
   }
   
+  public void setModifier(Consumer<E> modifier) {
+    this.clear();
+    this.supplier = () -> {
+      E value = peek();
+      modifier.accept(value);
+      return value;
+    };
+    
+    determineDependencies();
+  }
+  
   public Supplier<E> getSupplier() {
     return supplier;
   }
