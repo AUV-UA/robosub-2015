@@ -44,17 +44,12 @@ public class DangerZonaAgent {
     recorder.start();
     
     Timer.getInstance().reset(); // Begin timing
-
-    new Thread(() -> {
-      while(true) {
-        robot.update();
-        try {
-          Thread.sleep(10);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-    }).start();
+    
+    Scheduler scheduler = new Scheduler();
+    
+    scheduler.schedule(() -> {
+      robot.update();
+    }, 10);
   }
 
   private static void buildFrames() {
