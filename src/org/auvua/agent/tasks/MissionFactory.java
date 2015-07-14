@@ -1,22 +1,18 @@
 package org.auvua.agent.tasks;
 
-import org.auvua.agent.TwoVector;
-import org.auvua.model.RobotModel;
+import org.auvua.model.dangerZona.DangerZona;
+import org.auvua.reactive.core.R;
 
 public class MissionFactory {
-  
-  RobotModel robot = RobotModel.getInstance();
 
-  public Task build(MissionType type) {
+  public static Task build(MissionType type, DangerZona robot) {
     switch(type) {
-      //case RANDOM_WALK:
-        //return new RandomWalkMission().getStartTask();
       case SQUARE_WALK:
         return new DrivingMission().getStartTask();
-      case POSITION_CONTROL:
-        return new GoToArea(robot, new TwoVector(), 10);
       case REMOTE_CONTROL:
-    	return null;
+        return new RemoteControl(robot);
+      case MAINTAIN_DEPTH:
+        return new MaintainDepth(robot, R.var(100.0), 5.0);
       default:
         return new DoNothing(robot);
     }
@@ -25,7 +21,7 @@ public class MissionFactory {
   public enum MissionType {
     RANDOM_WALK,
     SQUARE_WALK,
-    POSITION_CONTROL,
+    MAINTAIN_DEPTH,
     REMOTE_CONTROL
   }
 }

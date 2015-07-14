@@ -4,7 +4,7 @@ import javax.vecmath.Vector3d;
 
 import org.auvua.model.motion.Kinematics;
 
-public class Thruster extends PhysicsObject2 {
+public class Thruster extends PhysicsObject {
   
   private double thrust = 0;
   private Vector3d forceDirection;

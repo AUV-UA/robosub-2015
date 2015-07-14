@@ -4,7 +4,7 @@ import javax.vecmath.Vector3d;
 
 import org.auvua.model.motion.Kinematics;
 
-public class Force extends PhysicsObject2 {
+public class Force extends PhysicsObject {
   
   private Vector3d force;
   

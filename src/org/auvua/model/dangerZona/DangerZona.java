@@ -28,6 +28,10 @@ public class DangerZona {
   }
   
   public void update() {
-    Timer.getInstance().trigger();
+    R.doSync(() -> {
+      Timer.getInstance().trigger();
+      hardware.getInputs().trigger();
+    });
+    
   }
 }

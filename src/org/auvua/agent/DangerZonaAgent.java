@@ -9,8 +9,10 @@ import javax.swing.JFrame;
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.DataRecorder;
-import org.auvua.agent.oi.OperatorInterface2;
+import org.auvua.agent.control.Timer;
+import org.auvua.agent.tasks.MissionFactory;
 import org.auvua.agent.tasks.Task;
+import org.auvua.agent.tasks.MissionFactory.MissionType;
 import org.auvua.model.component.DangerZonaInputs;
 import org.auvua.model.component.DangerZonaOutputs;
 import org.auvua.model.dangerZona.DangerZona;
@@ -18,18 +20,22 @@ import org.auvua.model.dangerZona.DangerZonaFactory;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
 import org.auvua.model.dangerZona.sim.DangerZonaHardwareSim;
 import org.auvua.reactive.core.R;
-import org.auvua.view.DangerZonaOrientationRenderer;
 import org.auvua.view.RChart;
 
 public class DangerZonaAgent {
   
   public static Task command;
   public static Map<Character,Integer> keyMap = new HashMap<Character,Integer>();
-  public static DangerZona robot = DangerZonaFactory.build(RobotType.DANGER_ZONA_SIM);
+  public static DangerZona robot;
 
   public static void main( String[] args ) throws SecurityException, IOException {
     
+    robot = DangerZonaFactory.build(RobotType.DANGER_ZONA_SIM);
+    
     buildFrames();
+    
+    Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
+    task.start();
     
     DataRecorder recorder = new DataRecorder("data2.txt");
     recorder.record(robot.hardware.getOutputs().positionSensor.x, "xPos");
@@ -37,12 +43,11 @@ public class DangerZonaAgent {
     recorder.record(robot.hardware.getOutputs().velocitySensor.x, "yVel");
     recorder.start();
     
-    DangerZonaOrientationRenderer or = new DangerZonaOrientationRenderer(robot);
+    Timer.getInstance().reset(); // Begin timing
 
     new Thread(() -> {
       while(true) {
         robot.update();
-        or.update();
         try {
           Thread.sleep(10);
         } catch (InterruptedException e) {
@@ -53,29 +58,21 @@ public class DangerZonaAgent {
   }
 
   private static void buildFrames() {
-    OperatorInterface2 oi = new OperatorInterface2();
-    
-    DangerZonaInputs inputs = robot.hardware.getInputs();
     DangerZonaOutputs outputs = robot.hardware.getOutputs();
-    
-    inputs.frontRight.setSupplier(() -> 5000 * (oi.forward.get() - oi.strafe.get() + oi.rotation.get()));
-    inputs.frontLeft.setSupplier(() -> 5000 * (oi.forward.get() + oi.strafe.get() - oi.rotation.get()));
-    inputs.rearLeft.setSupplier(() -> 5000 * (oi.forward.get() - oi.strafe.get() - oi.rotation.get()));
-    inputs.rearRight.setSupplier(() -> 5000 * (oi.forward.get() + oi.strafe.get() + oi.rotation.get()));
-    
-    inputs.heaveFrontRight.setSupplier(() -> 5000 * (oi.elevation.get() + oi.pitch.get() - oi.roll.get()));
-    inputs.heaveFrontLeft.setSupplier(() -> 5000 * (oi.elevation.get() + oi.pitch.get() + oi.roll.get()));
-    inputs.heaveRearLeft.setSupplier(() -> 5000 * (oi.elevation.get() - oi.pitch.get() + oi.roll.get()));
-    inputs.heaveRearRight.setSupplier(() -> 5000 * (oi.elevation.get() - oi.pitch.get() - oi.roll.get()));
+    DangerZonaInputs inputs = robot.hardware.getInputs();
     
     RChart chart = new RChart(800, 600);
     
     chart.observe(outputs.depthSensor, "Depth");
-    chart.observe(oi.elevation, "Elevation Control");
     
     chart.observe(outputs.gyroRateX, "Gyro Rate X");
     chart.observe(outputs.gyroRateY, "Gyro Rate Y");
     chart.observe(outputs.gyroRateZ, "Gyro Rate Z");
+    
+    chart.observe(inputs.heaveFrontRight, "Heave FR");
+    chart.observe(inputs.heaveFrontLeft, "Heave FL");
+    chart.observe(inputs.heaveRearLeft, "Heave RL");
+    chart.observe(inputs.heaveRearRight, "Heave RR");
     
     chart.observe(R.var(() -> {
       Vector3d calcRoll = robot.calcKinematics.get().orientation.localY;
@@ -87,7 +84,6 @@ public class DangerZonaAgent {
     frame2.setSize(new Dimension(800, 600));
     frame2.setVisible(true);
     frame2.add(chart.getPanel());
-    frame2.addKeyListener(oi.getKeyListener());
   }
 
 }

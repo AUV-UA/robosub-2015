@@ -26,7 +26,7 @@ public class DangerZonaRenderer {
   public SimpleUniverse universe;
   private DangerZonaPhysicsModel robot;
   public Transform3D viewTrans;
-  public Vector3d cameraPos = new Vector3d(1000.0, -1000.0, 1000.0);
+  public Vector3d cameraPos = new Vector3d(20.0, -20.0, 20.0);
   
   public DangerZonaRenderer(DangerZonaPhysicsModel robot) {
     this.robot = robot;
@@ -40,7 +40,7 @@ public class DangerZonaRenderer {
     trans = new Transform3D();
     trans.setTranslation(new Vector3f(0.0f,0.0f,0.0f));
     objTrans.setTransform(trans);
-    objTrans.addChild(new ColorCube(20.0));
+    objTrans.addChild(new ColorCube(1.0));
 
     group.addChild(objTrans);
 
@@ -58,7 +58,7 @@ public class DangerZonaRenderer {
     }));
     
     universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
-    universe.getViewer().getView().setBackClipDistance(10000.0f);
+    universe.getViewer().getView().setBackClipDistance(1000.0f);
 
     universe.addBranchGraph(group);
     universe.addBranchGraph(createSceneGraph());

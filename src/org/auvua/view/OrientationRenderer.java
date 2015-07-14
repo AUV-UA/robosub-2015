@@ -12,24 +12,24 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
-import org.auvua.model.component.PhysicsRobot;
+import org.auvua.model.motion.Orientation;
 
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
-public class PhysicsRobotRenderer {
+public class OrientationRenderer {
   
   private TransformGroup objTrans;
   private Transform3D trans;
   public SimpleUniverse universe;
-  private PhysicsRobot robot;
+  private Orientation orientation;
   public Transform3D viewTrans;
-  public Vector3d cameraPos = new Vector3d(1000.0, -1000.0, 1000.0);
+  public Vector3d cameraPos = new Vector3d(100.0, -100.0, 100.0);
   
-  public PhysicsRobotRenderer(PhysicsRobot robot) {
-    this.robot = robot;
+  public OrientationRenderer(Orientation orientation) {
+    this.orientation = orientation;
     
     universe = new SimpleUniverse();
 
@@ -48,7 +48,6 @@ public class PhysicsRobotRenderer {
 
     viewTrans = new Transform3D();
     viewTrans.setTranslation(cameraPos);
-    /*
     double s2 = 1.0 / Math.sqrt(2.0);
     double s3 = 1.0 / Math.sqrt(3.0);
     double s6 = 1.0 / Math.sqrt(6.0);
@@ -58,38 +57,15 @@ public class PhysicsRobotRenderer {
         s2, s6, -s3,
         0.0, s23, s3
     }));
-    */
     universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
     universe.getViewer().getView().setBackClipDistance(10000.0f);
 
     universe.addBranchGraph(group);
-    universe.addBranchGraph(createSceneGraph());
+    //universe.addBranchGraph(createSceneGraph());
   }
   
   public void update() {
-    Vector3d viewZ = new Vector3d();
-    viewZ.sub(cameraPos, robot.kinematics.pos);
-    viewZ.normalize();
-    
-    Vector3d viewX = new Vector3d();
-    viewX.x = -viewZ.y;
-    viewX.y = viewZ.x;
-    viewX.normalize();
-    
-    Vector3d viewY = new Vector3d();
-    viewY.cross(viewZ, viewX);
-    
-    Matrix3d cameraMat = new Matrix3d();
-    cameraMat.setColumn(0, viewX);
-    cameraMat.setColumn(1, viewY);
-    cameraMat.setColumn(2, viewZ);
-
-    viewTrans.setRotation(cameraMat);
-    universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
-    
-    Matrix3d rotation = robot.kinematics.orientation.asMatrix();
-    
-    trans.setTranslation(robot.kinematics.pos);
+    Matrix3d rotation = orientation.asMatrix();
     trans.setRotation(rotation);
     objTrans.setTransform(trans);
   }

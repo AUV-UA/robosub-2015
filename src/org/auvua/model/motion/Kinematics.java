@@ -1,6 +1,5 @@
 package org.auvua.model.motion;
 
-import javax.media.j3d.Transform3D;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Vector3d;
 
