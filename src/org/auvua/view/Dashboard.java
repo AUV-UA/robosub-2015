@@ -11,8 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 import org.auvua.agent.oi.OperatorInterface;
-import org.auvua.model.component.DangerZonaOutputs;
 import org.auvua.model.dangerZona.DangerZona;
+import org.auvua.model.dangerZona.DangerZonaOutputs;
 
 public class Dashboard {
   

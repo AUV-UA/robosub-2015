@@ -1,5 +1,7 @@
 package org.auvua.agent;
 
+import jama.Matrix;
+
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,15 +13,17 @@ import javax.vecmath.Vector3d;
 import org.auvua.agent.control.DataRecorder;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.tasks.MissionFactory;
+import org.auvua.agent.tasks.OrientRobot;
 import org.auvua.agent.tasks.Task;
 import org.auvua.agent.tasks.MissionFactory.MissionType;
-import org.auvua.model.component.DangerZonaInputs;
-import org.auvua.model.component.DangerZonaOutputs;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaFactory;
+import org.auvua.model.dangerZona.DangerZonaInputs;
+import org.auvua.model.dangerZona.DangerZonaOutputs;
+import org.auvua.model.dangerZona.DzHardwareSim;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
-import org.auvua.model.dangerZona.sim.DangerZonaHardwareSim;
 import org.auvua.reactive.core.R;
+import org.auvua.reactive.core.RxVar;
 import org.auvua.view.RChart;
 
 public class DangerZonaAgent {
@@ -34,8 +38,16 @@ public class DangerZonaAgent {
     
     buildFrames();
     
-    Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
+    //Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
+    RxVar<Matrix> orientation = R.var(new Matrix(new double[][] {
+        {0, 1, 0},
+        {0, 0, 1},
+        {1, 0, 0}
+    }));
+    Task task = new OrientRobot(robot, orientation);
     task.start();
+    
+    Timer.getInstance().scale(1.0);
     
     DataRecorder recorder = new DataRecorder("data2.txt");
     recorder.record(robot.hardware.getOutputs().positionSensor.x, "xPos");
@@ -64,16 +76,14 @@ public class DangerZonaAgent {
     chart.observe(outputs.gyroRateY, "Gyro Rate Y");
     chart.observe(outputs.gyroRateZ, "Gyro Rate Z");
     
+    chart.observe(inputs.frontRight, "FR");
+    chart.observe(inputs.frontLeft, "FL");
+    chart.observe(inputs.rearLeft, "RL");
+    chart.observe(inputs.rearRight, "RR");
     chart.observe(inputs.heaveFrontRight, "Heave FR");
     chart.observe(inputs.heaveFrontLeft, "Heave FL");
     chart.observe(inputs.heaveRearLeft, "Heave RL");
     chart.observe(inputs.heaveRearRight, "Heave RR");
-    
-    chart.observe(R.var(() -> {
-      Vector3d calcRoll = robot.calcKinematics.get().orientation.localY;
-      Vector3d actualRoll = ((DangerZonaHardwareSim) robot.hardware).physicsModel.get().kinematics.orientation.localY;
-      return calcRoll.angle(actualRoll);
-    }), "Roll error");
     
     JFrame frame2 = new JFrame();
     frame2.setSize(new Dimension(800, 600));

@@ -41,12 +41,8 @@ public abstract class PhysicsObject {
   public void addChild(PhysicsObject child) {
     children.add(child);
     child.parent = this;
-    Vector3d toChild = new Vector3d();
     
-    Matrix3d transform = kinematics.orientation.asMatrix();
-    transform.transform(child.kinematics.pos, toChild);
-    
-    child.locationFromParent = toChild;
+    child.locationFromParent = new Vector3d(child.kinematics.pos);
   }
   
   public void addChildren(PhysicsObject ... children) {
@@ -57,27 +53,10 @@ public abstract class PhysicsObject {
   
   public void translate(Vector3d vector) {
     kinematics.pos.add(vector);
-    children.forEach((child) -> {
-      child.translate(vector);
-    });
   }
   
   public void rotate(AxisAngle4d aa) {
     kinematics.orientation.rotate(aa);
-    
-    Transform3D trans = new Transform3D();
-    trans.setRotation(aa);
-    if (locationFromParent != null) {
-      trans.transform(locationFromParent);
-    }
-    
-    if (parent != null) {
-      kinematics.pos.add(parent.kinematics.pos, locationFromParent);
-    }
-    
-    children.forEach((child) -> {
-      child.rotate(aa);
-    });
   }
   
   public Vector3d getForce() {
@@ -87,6 +66,10 @@ public abstract class PhysicsObject {
     children.forEach((child) -> {
       force.add(child.getForce());
     });
+    
+    Transform3D transform = new Transform3D();
+    transform.setRotation(kinematics.orientation.asMatrix3d());
+    transform.transform(force);
     return force;
   }
   
@@ -100,6 +83,10 @@ public abstract class PhysicsObject {
       moment.add(child.getMoment());
       moment.add(cross);
     });
+    
+    Transform3D transform = new Transform3D();
+    transform.setRotation(kinematics.orientation.asMatrix3d());
+    transform.transform(moment);
     return moment;
   }
   

@@ -22,6 +22,15 @@ public class DangerZonaPhysicsModel extends PhysicsObject {
   public Thruster t6 = new Thruster(new Vector3d(-.146,  .216, 0.1));
   public Thruster t7 = new Thruster(new Vector3d(-.146, -.216, 0.1));
   public Thruster t8 = new Thruster(new Vector3d( .146, -.216, 0.1));
+  
+  public static DangerZonaPhysicsModel instance;
+  
+  public static DangerZonaPhysicsModel getInstance() {
+    if (instance == null) {
+      instance = new DangerZonaPhysicsModel();
+    }
+    return instance;
+  }
 
   public DangerZonaPhysicsModel() {
     Kinematics kinematics = new Kinematics(new Vector3d(0.0, 0.0, 0.0));
@@ -71,7 +80,7 @@ public class DangerZonaPhysicsModel extends PhysicsObject {
     t7.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     t8.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     
-    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 0.1), new Vector3d(0.0, 0.0, 31.0 * 9.81));
+    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 31.0 * 9.81));
     Force gravity = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, -30.0 * 9.81));
     
     addChildren(t1, t2, t3, t4, t5, t6, t7, t8, buoyancy, gravity);

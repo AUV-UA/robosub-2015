@@ -1,4 +1,4 @@
-package org.auvua.model.component;
+package org.auvua.model.dangerZona;
 
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxValve;

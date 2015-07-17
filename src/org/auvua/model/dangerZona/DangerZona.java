@@ -9,14 +9,15 @@ import org.auvua.reactive.core.RxVar;
 
 
 public class DangerZona {
-  public final DangerZonaHardware hardware;
+  public final DzHardware hardware;
   public final RxVar<DzCalculatedKinematics> calcKinematics = R.var(new DzCalculatedKinematics());
+  public final RxVar<DzMotionTranslator> motionTranslator = R.var(new DzMotionTranslator());
   
-  public DangerZona(DangerZonaHardware hw) {
+  public DangerZona(DzHardware hw) {
     this.hardware = hw;
     
     calcKinematics.setModifier((ck) -> {
-      Matrix3d orientationMatrix = ck.orientation.asMatrix();
+      Matrix3d orientationMatrix = ck.orientation.asMatrix3d();
       Vector3d localAngVel = new Vector3d();
       localAngVel.x = hardware.getOutputs().gyroRateX.get();
       localAngVel.y = hardware.getOutputs().gyroRateY.get();
@@ -30,7 +31,7 @@ public class DangerZona {
   public void update() {
     R.doSync(() -> {
       Timer.getInstance().trigger();
-      hardware.getInputs().trigger();
+      hardware.update();
     });
     
   }

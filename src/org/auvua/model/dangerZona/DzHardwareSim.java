@@ -1,4 +1,4 @@
-package org.auvua.model.dangerZona.sim;
+package org.auvua.model.dangerZona;
 
 import javax.vecmath.Vector3d;
 
@@ -8,17 +8,13 @@ import org.auvua.agent.control.RateLimiter;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.signal.FirstOrderSystem;
 import org.auvua.agent.signal.Integrator;
-import org.auvua.model.component.DangerZonaInputs;
-import org.auvua.model.component.DangerZonaOutputs;
-import org.auvua.model.dangerZona.DangerZonaHardware;
-import org.auvua.model.dangerZona.DangerZonaPhysicsModel;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 import org.auvua.view.DangerZonaRenderer;
 
-public class DangerZonaHardwareSim implements DangerZonaHardware {
+public class DzHardwareSim implements DzHardware {
   
-  public RxVar<DangerZonaPhysicsModel> physicsModel;
+  public RxVar<DangerZonaPhysicsModel> physicsModel = R.var(DangerZonaPhysicsModel.getInstance());
   
   public RxVar<Double> depthSensor;
   public RxVar<Double> gyroRateX;
@@ -30,20 +26,19 @@ public class DangerZonaHardwareSim implements DangerZonaHardware {
   public DangerZonaInputs inputs = new DangerZonaInputs();
   public DangerZonaOutputs outputs = new DangerZonaOutputs();
   
-  public final RxVar<Double> frontRight = new RateLimiter(new HardLimit(inputs.frontRight, -35.6, 35.6), 142.4);
-  public final RxVar<Double> frontLeft = new RateLimiter(new HardLimit(inputs.frontLeft, -35.6, 35.6), 142.4);
-  public final RxVar<Double> rearLeft = new RateLimiter(new HardLimit(inputs.rearLeft, -35.6, 35.6), 142.4);
-  public final RxVar<Double> rearRight = new RateLimiter(new HardLimit(inputs.rearRight, -35.6, 35.6), 142.4);
-  public final RxVar<Double> heaveFrontRight = new RateLimiter(new HardLimit(inputs.heaveFrontRight, -26.7, 26.7), 106.8);
-  public final RxVar<Double> heaveFrontLeft = new RateLimiter(new HardLimit(inputs.heaveFrontLeft, -26.7, 26.7), 106.8);
-  public final RxVar<Double> heaveRearLeft = new RateLimiter(new HardLimit(inputs.heaveRearLeft, -26.7, 26.7), 106.8);
-  public final RxVar<Double> heaveRearRight = new RateLimiter(new HardLimit(inputs.heaveRearRight, -26.7, 26.7), 106.8);
+  public final RxVar<Double> frontRight = new RateLimiter(new HardLimit(inputs.frontRight, -35.6, 35.6), 35.6 * 10);
+  public final RxVar<Double> frontLeft = new RateLimiter(new HardLimit(inputs.frontLeft, -35.6, 35.6), 35.6 * 10);
+  public final RxVar<Double> rearLeft = new RateLimiter(new HardLimit(inputs.rearLeft, -35.6, 35.6), 35.6 * 10);
+  public final RxVar<Double> rearRight = new RateLimiter(new HardLimit(inputs.rearRight, -35.6, 35.6), 35.6 * 10);
+  public final RxVar<Double> heaveFrontRight = new RateLimiter(new HardLimit(inputs.heaveFrontRight, -26.7, 26.7), 26.7 * 10);
+  public final RxVar<Double> heaveFrontLeft = new RateLimiter(new HardLimit(inputs.heaveFrontLeft, -26.7, 26.7), 26.7 * 10);
+  public final RxVar<Double> heaveRearLeft = new RateLimiter(new HardLimit(inputs.heaveRearLeft, -26.7, 26.7), 26.7 * 10);
+  public final RxVar<Double> heaveRearRight = new RateLimiter(new HardLimit(inputs.heaveRearRight, -26.7, 26.7), 26.7 * 10);
   
   public DangerZonaRenderer r;
   
-  public DangerZonaHardwareSim(DangerZonaPhysicsModel physicsModel) {
-    this.physicsModel = R.var(physicsModel);
-    r = new DangerZonaRenderer(physicsModel);
+  public DzHardwareSim() {
+    r = DangerZonaRenderer.getInstance();
     
     this.physicsModel.setModifier((model) -> {
       model.t1.setThrust(frontRight.get());
@@ -66,20 +61,20 @@ public class DangerZonaHardwareSim implements DangerZonaHardware {
       return -physicsModel.get().kinematics.pos.z;
     }), 10);
     
-    outputs.gyroRateX = new FirstOrderSystem(R.var(() -> {
+    outputs.gyroRateX = R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localX.dot(robot.kinematics.angVel);
-    }), 10);
+    });
     
-    outputs.gyroRateY = new FirstOrderSystem(R.var(() -> {
+    outputs.gyroRateY = R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localY.dot(robot.kinematics.angVel);
-    }), 10);
+    });
     
-    outputs.gyroRateZ = new FirstOrderSystem(R.var(() -> {
+    outputs.gyroRateZ = R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
       return robot.kinematics.orientation.localZ.dot(robot.kinematics.angVel);
-    }), 10);
+    });
     
     outputs.accelX = new FirstOrderSystem(R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
@@ -127,5 +122,10 @@ public class DangerZonaHardwareSim implements DangerZonaHardware {
   @Override
   public DangerZonaOutputs getOutputs() {
     return outputs;
+  }
+  
+  @Override
+  public void update() {
+    inputs.trigger();
   }
 }

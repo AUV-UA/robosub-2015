@@ -65,7 +65,7 @@ public class OrientationRenderer {
   }
   
   public void update() {
-    Matrix3d rotation = orientation.asMatrix();
+    Matrix3d rotation = orientation.asMatrix3d();
     trans.setRotation(rotation);
     objTrans.setTransform(trans);
   }

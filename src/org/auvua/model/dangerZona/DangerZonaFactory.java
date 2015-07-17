@@ -1,6 +1,5 @@
 package org.auvua.model.dangerZona;
 
-import org.auvua.model.dangerZona.sim.DangerZonaHardwareSim;
 
 public class DangerZonaFactory {
   
@@ -19,8 +18,7 @@ public class DangerZonaFactory {
   }
   
   public static DangerZona buildDangerZona() {
-    DangerZonaPhysicsModel physicsModel = new DangerZonaPhysicsModel();
-    DangerZonaHardware hardware = new DangerZonaHardwareSim(physicsModel);
+    DzHardware hardware = new DzHardwareSim();
     DangerZona model = new DangerZona(hardware);
     return model;
   }

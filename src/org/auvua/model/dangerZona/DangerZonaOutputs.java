@@ -1,4 +1,4 @@
-package org.auvua.model.component;
+package org.auvua.model.dangerZona;
 
 import org.auvua.agent.TwoVector;
 import org.auvua.reactive.core.RxVar;

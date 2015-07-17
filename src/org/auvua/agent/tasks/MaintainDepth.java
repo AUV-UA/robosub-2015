@@ -1,9 +1,9 @@
 package org.auvua.agent.tasks;
 
 import org.auvua.agent.control.PidController;
-import org.auvua.model.component.DangerZonaInputs;
-import org.auvua.model.component.DangerZonaOutputs;
 import org.auvua.model.dangerZona.DangerZona;
+import org.auvua.model.dangerZona.DangerZonaInputs;
+import org.auvua.model.dangerZona.DangerZonaOutputs;
 import org.auvua.reactive.core.RxVar;
 
 public class MaintainDepth extends AbstractTask {
@@ -17,8 +17,8 @@ public class MaintainDepth extends AbstractTask {
   public MaintainDepth(DangerZona robot, RxVar<Double> desiredDepth, double error) {
     this.desiredDepth = desiredDepth;
     this.robot = robot;
-    this.inputs = this.robot.hardware.getInputs();
-    this.outputs = this.robot.hardware.getOutputs();
+    this.inputs = this.robot.hardware.get().getInputs();
+    this.outputs = this.robot.hardware.get().getOutputs();
     this.atDepth = createCondition("atDepth", () -> {
       return Math.abs(desiredDepth.get() - outputs.depthSensor.get()) < error;
     });
@@ -27,6 +27,7 @@ public class MaintainDepth extends AbstractTask {
   @Override
   public void initialize() {
     PidController controller = new PidController(outputs.depthSensor, desiredDepth, -100, 0, -100);
+    
     inputs.heaveFrontRight.setSupplier(controller);
     inputs.heaveFrontLeft.setSupplier(controller);
     inputs.heaveRearLeft.setSupplier(controller);

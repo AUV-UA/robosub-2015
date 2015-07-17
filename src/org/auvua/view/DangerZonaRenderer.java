@@ -4,6 +4,9 @@ import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Group;
+import javax.media.j3d.LineArray;
+import javax.media.j3d.Shape3D;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
 import javax.vecmath.AxisAngle4d;
@@ -27,13 +30,24 @@ public class DangerZonaRenderer {
   private DangerZonaPhysicsModel robot;
   public Transform3D viewTrans;
   public Vector3d cameraPos = new Vector3d(20.0, -20.0, 20.0);
+  public BranchGroup group;
+  
+  private static DangerZonaRenderer instance;
+  
+  public static DangerZonaRenderer getInstance() {
+    if (instance == null) {
+      instance = new DangerZonaRenderer(DangerZonaPhysicsModel.getInstance());
+    }
+    return instance;
+  }
   
   public DangerZonaRenderer(DangerZonaPhysicsModel robot) {
     this.robot = robot;
     
     universe = new SimpleUniverse();
 
-    BranchGroup group = new BranchGroup();
+    group = new BranchGroup();
+    group.setCapability(Group.ALLOW_CHILDREN_EXTEND);
     
     objTrans = new TransformGroup();
     objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
@@ -86,7 +100,7 @@ public class DangerZonaRenderer {
     viewTrans.setRotation(cameraMat);
     universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
     
-    Matrix3d rotation = robot.kinematics.orientation.asMatrix();
+    Matrix3d rotation = robot.kinematics.orientation.asMatrix3d();
     
     trans.setTranslation(robot.kinematics.pos);
     trans.setRotation(rotation);

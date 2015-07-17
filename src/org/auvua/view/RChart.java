@@ -75,9 +75,9 @@ public class RChart extends StandardDependency {
               (int) (time * pixelsPerSecond % width),
               (int) val + height / 2);
           
-          g.clearRect(0, i * 20, 300, 20);
+          g.clearRect(0, i * 20, 500, 20);
           g.drawString(labels.get(var) + ":", 10, 20 + i * 20);
-          g.drawString(String.format("%.4f", val), 150, 20 + i * 20);
+          g.drawString(String.format("%.32f", val), 150, 20 + i * 20);
         }
         
         lastValues.put(var, val);
