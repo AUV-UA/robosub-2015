@@ -12,7 +12,7 @@ public class DzMotionController {
   public static DangerZona robot;
   public static DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
   
-  public static final RxVar<Matrix> angAccel = R.var(new Matrix(3,3));
+  public static final RxVar<Matrix> angAccel = R.var(new Matrix(3,1));
   public static final RxVar<Matrix> accel = R.var(new Matrix(new double[][] {
       { 1, 0, 0 }
   }).transpose());

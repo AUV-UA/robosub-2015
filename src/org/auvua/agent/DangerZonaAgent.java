@@ -38,11 +38,13 @@ public class DangerZonaAgent {
     
     buildFrames();
     
+    double s2 = 1 / Math.sqrt(2.0);
+    
     //Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
     RxVar<Matrix> orientation = R.var(new Matrix(new double[][] {
-        {0, 1, 0},
-        {0, 0, 1},
-        {1, 0, 0}
+        {1, 0, 0},
+        {0, s2, s2},
+        {0, -s2, s2}
     }));
     Task task = new OrientRobot(robot, orientation);
     task.start();
@@ -57,11 +59,14 @@ public class DangerZonaAgent {
     
     Timer.getInstance().reset(); // Begin timing
     
-    Scheduler scheduler = new Scheduler();
-    
-    scheduler.schedule(() -> {
-      robot.update();
-    }, 10);
+    new Thread(() -> {
+      while(true) {
+        robot.update();
+        try { Thread.sleep(10); } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }).start();
   }
 
   private static void buildFrames() {

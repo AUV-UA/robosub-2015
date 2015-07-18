@@ -7,7 +7,7 @@ import org.auvua.model.motion.Kinematics;
 public class Thruster extends PhysicsObject {
   
   private double thrust = 0;
-  private Vector3d forceDirection;
+  public final Vector3d forceDirection;
   
   public Thruster(Vector3d location) {
     super(new Kinematics(location));

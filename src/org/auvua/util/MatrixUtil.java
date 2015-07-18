@@ -17,4 +17,16 @@ public class MatrixUtil {
     return out;
   }
   
+  public static String mat2str(Matrix m) {
+    String str = "";
+    double[][] arr = m.getArray();
+    for (int r = 0; r < arr.length; r++) {
+      for (int c = 0; c < arr[r].length; c++) {
+        str += String.format("%12.8f ", arr[r][c]);
+      }
+      str += "\n";
+    }
+    return str;
+  }
+  
 }

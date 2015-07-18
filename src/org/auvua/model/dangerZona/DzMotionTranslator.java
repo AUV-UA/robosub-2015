@@ -94,7 +94,9 @@ public class DzMotionTranslator {
     motion.setMatrix(0, 2, 0, 0, accel);
     motion.setMatrix(3, 5, 0, 0, angAccel);
     
-    return system.solve(motion);
+    Matrix thrusts = system.solve(motion);
+    
+    return thrusts;
   }
   
   public static Matrix getRotationMatrix(Matrix initialOrientation, Matrix finalOrientation) {
@@ -110,7 +112,7 @@ public class DzMotionTranslator {
     for (int i = 0; i < imEigParts.length; i++) {
       if (imEigParts[i] == 0 && Math.abs(imRealParts[i] - 1) < 0.0001 ) {
         double trace = rotationMatrix.trace();
-        double angle = Math.acos((trace - 1) / 2);
+        double angle = Math.acos(Math.min(1, Math.max(-1, (trace - 1) / 2)));
         Matrix vector = eigenDecomp.getV().getMatrix(0, 2, i, i);
         double x = vector.get(0, 0);
         double y = vector.get(1, 0);
@@ -138,7 +140,7 @@ public class DzMotionTranslator {
     double[][] arr = m.getArray();
     for (int r = 0; r < arr.length; r++) {
       for (int c = 0; c < arr[r].length; c++) {
-        str += String.format("%12.4f ", arr[r][c]);
+        str += String.format("%12.8f ", arr[r][c]);
       }
       str += "\n";
     }

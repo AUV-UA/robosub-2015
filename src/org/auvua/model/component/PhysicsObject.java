@@ -70,6 +70,7 @@ public abstract class PhysicsObject {
     Transform3D transform = new Transform3D();
     transform.setRotation(kinematics.orientation.asMatrix3d());
     transform.transform(force);
+    
     return force;
   }
   
@@ -117,6 +118,9 @@ public abstract class PhysicsObject {
     Vector3d dPos = new Vector3d(kinematics.vel);
     dPos.scale(dt);
     translate(dPos);
+    
+    
+    //System.out.println(dt + " " + kinematics.accel);
     
     kinematics.angAccel.set(getAngularAcceleration());
     kinematics.angVel.scaleAdd(dt, kinematics.angAccel, kinematics.angVel);
