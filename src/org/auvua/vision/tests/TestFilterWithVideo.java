@@ -20,7 +20,7 @@ public class TestFilterWithVideo {
 	public static void main( String[] args ) {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		
-		VideoCapture video = new VideoCapture("markerDayOne");
+		VideoCapture video = new VideoCapture("~/Documents/GOPR0025.MP4");
 
 	    if(!video.isOpened()){
 	        System.out.println("Video Error");

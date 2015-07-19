@@ -119,14 +119,13 @@ public abstract class PhysicsObject {
     dPos.scale(dt);
     translate(dPos);
     
-    
-    //System.out.println(dt + " " + kinematics.accel);
-    
     kinematics.angAccel.set(getAngularAcceleration());
     kinematics.angVel.scaleAdd(dt, kinematics.angAccel, kinematics.angVel);
     Vector3d dAngPos = new Vector3d(kinematics.angVel);
     dAngPos.scale(dt);
     rotate(new AxisAngle4d(dAngPos, dAngPos.length()));
+    
+    //System.out.println(dt + " " + kinematics.angAccel);
     
     lastTime = time;
   }

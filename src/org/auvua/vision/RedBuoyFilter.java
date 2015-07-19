@@ -62,7 +62,7 @@ public class RedBuoyFilter implements ImageFilter {
 			filterOutput.put("size", size);
 			
 	    	if(drawIndicators) {
-		    	Core.circle(image, avgCenter, 5, new Scalar(255,0,0), 3);
+	    	  Core.circle(image, avgCenter, 5, new Scalar(255,0,0), 3);
 	    	}
         } else {
         	filterOutput.put("buoyVisible", false);

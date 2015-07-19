@@ -55,9 +55,9 @@ public class DangerZonaPhysicsModel extends PhysicsObject {
     double dragY = .5 * rhoWater * cdY * areaY;
     double dragZ = .5 * rhoWater * cdZ * areaZ;
     
-    double rotDragX = 10;
-    double rotDragY = 10;
-    double rotDragZ = 10;
+    double rotDragX = 2;
+    double rotDragY = 2;
+    double rotDragZ = 2;
     
     Drag drag = new Drag(new Vector3d(dragX, dragY, dragZ), new Vector3d(rotDragX, rotDragY, rotDragZ), kinematics);
     

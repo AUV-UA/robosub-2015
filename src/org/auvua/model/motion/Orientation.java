@@ -3,7 +3,6 @@ package org.auvua.model.motion;
 import jama.Matrix;
 import jama.SingularValueDecomposition;
 
-import javax.media.j3d.Transform3D;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;

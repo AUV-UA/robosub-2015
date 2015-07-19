@@ -85,7 +85,7 @@ public class RedDownBuoyFilter implements ImageFilter {
 			filterOutput.put("yPosition", circleCenter.y);
 			filterOutput.put("radius", circleRadius);
 			if(drawIndicators) {
-				Core.circle(filterCopy, circleCenter, (int) circleRadius, new Scalar(255,0,255), 3);
+			  Core.circle(filterCopy, circleCenter, (int) circleRadius, new Scalar(255,0,255), 3);
 			}
 			
 			System.out.println(maxCircularity * circleRadius * circleRadius * Math.PI);

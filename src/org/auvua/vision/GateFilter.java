@@ -67,7 +67,7 @@ public class GateFilter implements ImageFilter {
     	avgCenter.y = avgY;
 
     	if(drawIndicators) {
-	    	Core.circle(image, avgCenter, 5, new Scalar(255,0,0), 3);
+    	  Core.circle(image, avgCenter, 5, new Scalar(255,0,0), 3);
 	    	Imgproc.cvtColor(edges, edges, Imgproc.COLOR_GRAY2BGR);
 	    	Imgproc.cvtColor(blurrededges, blurrededges, Imgproc.COLOR_GRAY2BGR);
 	    	Imgproc.cvtColor(blurredfiltered, blurredfiltered, Imgproc.COLOR_GRAY2BGR);
