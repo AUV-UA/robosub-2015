@@ -80,7 +80,7 @@ public class DangerZonaPhysicsModel extends PhysicsObject {
     t7.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     t8.rotate(new AxisAngle4d(1, 0, 0, Math.PI / 2));
     
-    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 31.0 * 9.81));
+    Force buoyancy = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, 30.1 * 9.81));
     Force gravity = new Force(new Vector3d(0.0, 0.0, 0.0), new Vector3d(0.0, 0.0, -30.0 * 9.81));
     
     addChildren(t1, t2, t3, t4, t5, t6, t7, t8, buoyancy, gravity);

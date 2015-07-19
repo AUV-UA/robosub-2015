@@ -40,4 +40,10 @@ public class RemoteControl extends AbstractTask {
     //dash
   }
 
+  @Override
+  public void terminate() {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

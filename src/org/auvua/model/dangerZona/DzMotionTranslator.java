@@ -4,7 +4,6 @@ import org.auvua.util.MatrixUtil;
 
 import jama.EigenvalueDecomposition;
 import jama.Matrix;
-import jama.SingularValueDecomposition;
 
 /**
  * 
@@ -17,8 +16,8 @@ public class DzMotionTranslator {
   private static final double SQRT_3 = Math.sqrt(3.0);
   
   public final Matrix system;
-  public Matrix accel = new Matrix(3, 1);
-  public Matrix angAccel = new Matrix(3, 1);
+  public Matrix force = new Matrix(3, 1);
+  public Matrix torque = new Matrix(3, 1);
   
   // A 3x3 matrix representing the orientation of the robot
   // Each row represents the direction of the robot's current principal
@@ -76,8 +75,8 @@ public class DzMotionTranslator {
   
   // Solve for thrust outputs assuming absolute-oriented accelerations
   public Matrix solveGlobal() {
-    Matrix accelLocal = orientation.transpose().times(accel);
-    Matrix angAccelLocal = orientation.transpose().times(angAccel);
+    Matrix accelLocal = orientation.transpose().times(force);
+    Matrix angAccelLocal = orientation.transpose().times(torque);
     
     Matrix motion = new Matrix(8,1);
     motion.setMatrix(0, 2, 0, 0, accelLocal);
@@ -91,8 +90,8 @@ public class DzMotionTranslator {
   //Solve for thrust outputs using robot-oriented accelerations
   public Matrix solveLocal() {
     Matrix motion = new Matrix(8,1);
-    motion.setMatrix(0, 2, 0, 0, accel);
-    motion.setMatrix(3, 5, 0, 0, angAccel);
+    motion.setMatrix(0, 2, 0, 0, force);
+    motion.setMatrix(3, 5, 0, 0, torque);
     
     Matrix thrusts = system.solve(motion);
     

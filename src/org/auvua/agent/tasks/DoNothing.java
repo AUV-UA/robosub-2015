@@ -25,5 +25,10 @@ public class DoNothing extends AbstractTask {
     inputs.heaveRearLeft.setSupplier(new OpenLoopController(0.0));
     inputs.heaveRearRight.setSupplier(new OpenLoopController(0.0));
   }
+  @Override
+  public void terminate() {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

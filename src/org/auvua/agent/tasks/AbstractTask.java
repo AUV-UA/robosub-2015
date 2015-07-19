@@ -20,6 +20,7 @@ public abstract class AbstractTask extends BaseComponent implements Task {
   private boolean started = false;
 
   public abstract void initialize();
+  public abstract void terminate();
 
   public void start() {
     if (started) return;
@@ -37,6 +38,7 @@ public abstract class AbstractTask extends BaseComponent implements Task {
   public void stop() {
     if (!started) return;
     started = false;
+    terminate();
     for(ReactiveDependency dep : newReactiveDependencies) {
       dep.clear();
     }

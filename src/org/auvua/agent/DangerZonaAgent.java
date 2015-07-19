@@ -1,52 +1,32 @@
 package org.auvua.agent;
 
-import jama.Matrix;
-
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.DataRecorder;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.tasks.MissionFactory;
-import org.auvua.agent.tasks.OrientRobot;
 import org.auvua.agent.tasks.Task;
 import org.auvua.agent.tasks.MissionFactory.MissionType;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DangerZonaFactory;
 import org.auvua.model.dangerZona.DangerZonaInputs;
 import org.auvua.model.dangerZona.DangerZonaOutputs;
-import org.auvua.model.dangerZona.DzHardwareSim;
-import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
-import org.auvua.reactive.core.R;
-import org.auvua.reactive.core.RxVar;
 import org.auvua.view.RChart;
 
 public class DangerZonaAgent {
   
   public static Task command;
   public static Map<Character,Integer> keyMap = new HashMap<Character,Integer>();
-  public static DangerZona robot;
+  public static DangerZona robot = DangerZona.getInstance();
 
   public static void main( String[] args ) throws SecurityException, IOException {
-    
-    robot = DangerZonaFactory.build(RobotType.DANGER_ZONA_SIM);
-    
     buildFrames();
     
-    double s2 = 1 / Math.sqrt(2.0);
-    
-    //Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
-    RxVar<Matrix> orientation = R.var(new Matrix(new double[][] {
-        {1, 0, 0},
-        {0, s2, s2},
-        {0, -s2, s2}
-    }));
-    Task task = new OrientRobot(robot, orientation);
+    Task task = MissionFactory.build(MissionType.ROBOSUB_MISSION, robot);
     task.start();
     
     Timer.getInstance().scale(1.0);
@@ -62,7 +42,7 @@ public class DangerZonaAgent {
     new Thread(() -> {
       while(true) {
         robot.update();
-        try { Thread.sleep(10); } catch (Exception e) {
+        try { Thread.sleep(50); } catch (Exception e) {
           e.printStackTrace();
         }
       }

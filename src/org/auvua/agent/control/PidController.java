@@ -1,4 +1,6 @@
 package org.auvua.agent.control;
+import java.util.function.Supplier;
+
 import org.auvua.agent.signal.Differentiator;
 import org.auvua.agent.signal.Integrator;
 import org.auvua.reactive.core.R;
@@ -7,7 +9,6 @@ import org.auvua.reactive.core.RxVar;
 public class PidController extends RxVar<Double> {
   
   private double feedForward = 0;
-  private double lastIntegral = 0;
   public final RxVar<Double> outputMin = R.var(-Double.MAX_VALUE);
   public final RxVar<Double> outputMax = R.var(Double.MAX_VALUE);
   public final RxVar<Double> error;
@@ -15,7 +16,7 @@ public class PidController extends RxVar<Double> {
   public final RxVar<Double> integral;
   public final RxVar<Double> derivative;
   
-  public PidController(RxVar<Double> processVar, RxVar<Double> targetVar, double kp, double ki, double kd) {
+  public PidController(Supplier<Double> processVar, Supplier<Double> targetVar, double kp, double ki, double kd) {
     Timer time = Timer.getInstance();
     this.setNoSync(0.0);
     

@@ -2,40 +2,53 @@ package org.auvua.agent;
 
 import jama.Matrix;
 
+import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaInputs;
 import org.auvua.model.dangerZona.DzMotionTranslator;
 import org.auvua.reactive.core.R;
+import org.auvua.reactive.core.RxAccumulator;
 import org.auvua.reactive.core.RxVar;
 
 public class DzMotionController {
-  public static DangerZona robot;
-  public static DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
   
-  public static final RxVar<Matrix> angAccel = R.var(new Matrix(3,1));
-  public static final RxVar<Matrix> accel = R.var(new Matrix(new double[][] {
-      { 1, 0, 0 }
-  }).transpose());
+  public static DzMotionController instance;
   
-  private static DangerZonaInputs inputs;
+  public DangerZona robot;
+  public DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
   
-  private static final DzMotionTranslator translator = new DzMotionTranslator();
+  public final RxAccumulator<Matrix> force =
+      new RxAccumulator<Matrix>(new Matrix(3,1), (v1, v2) -> v1.plus(v2));
+  public final RxAccumulator<Matrix> torque =
+      new RxAccumulator<Matrix>(new Matrix(3,1), (v1, v2) -> v1.plus(v2));
   
-  public static void setModel(DangerZona robot) {
-    DzMotionController.robot = robot;
-    DzMotionController.inputs = robot.hardware.getInputs();
-   }
+  private DangerZonaInputs inputs;
+  private final DzMotionTranslator translator;
   
-  public static void setOrientationMode(DzOrientationMode mode) {
-    DzMotionController.mode = mode;
+  public DzMotionController(DangerZona robot) {
+    this.robot = robot;
+    this.inputs = robot.hardware.getInputs();
+    this.translator = new DzMotionTranslator();
+    this.start();
   }
   
-  public static void start() {
-    RxVar<Matrix> thrustValues = R.var(new Matrix(8,1));
+  public void setOrientationMode(DzOrientationMode mode) {
+    this.mode = mode;
+  }
+  
+  public void start() {
+    force.addSupplier(() -> {
+      Timer.getInstance().get();
+      return new Matrix(3,1);
+    });
+    torque.addSupplier(() -> {
+      Timer.getInstance().get();
+      return new Matrix(3,1);
+    });
     
-    thrustValues.setSupplier(() -> {
-      translator.accel = accel.get();
-      translator.angAccel = angAccel.get();
+    RxVar<Matrix> thrustValues = R.var(() -> {
+      translator.force = force.get();
+      translator.torque = torque.get();
       translator.orientation = robot.calcKinematics.get().orientation.asMatrix();
       if (mode == DzOrientationMode.ABSOLUTE) {
         return translator.solveGlobal();
@@ -55,7 +68,7 @@ public class DzMotionController {
     inputs.heaveRearRight.setSupplier(() -> thrustValues.get().get(7, 0));
   }
   
-  public static void stop() {
+  public void stop() {
     inputs.frontRight.setSupplier(() -> 0.0);
     inputs.frontLeft.setSupplier(() -> 0.0);
     inputs.rearLeft.setSupplier(() -> 0.0);

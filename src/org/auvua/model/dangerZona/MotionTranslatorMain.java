@@ -6,11 +6,11 @@ public class MotionTranslatorMain {
   public static void main(String[] args) {
     DzMotionTranslator translator = new DzMotionTranslator();
     
-    translator.accel = new Matrix(new double[][] {
+    translator.force = new Matrix(new double[][] {
         {1, 0, 0} 
     }).transpose();
     
-    translator.angAccel = new Matrix(new double[][] {
+    translator.torque = new Matrix(new double[][] {
         {0, 0, 0} 
     }).transpose();
     

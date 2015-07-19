@@ -1,11 +1,14 @@
 package org.auvua.model.dangerZona;
 
+import java.util.Random;
+
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.TwoVector;
 import org.auvua.agent.control.HardLimit;
 import org.auvua.agent.control.RateLimiter;
 import org.auvua.agent.control.Timer;
+import org.auvua.agent.signal.Delayer;
 import org.auvua.agent.signal.FirstOrderSystem;
 import org.auvua.agent.signal.Integrator;
 import org.auvua.reactive.core.R;
@@ -26,14 +29,14 @@ public class DzHardwareSim implements DzHardware {
   public DangerZonaInputs inputs = new DangerZonaInputs();
   public DangerZonaOutputs outputs = new DangerZonaOutputs();
   
-  public final RxVar<Double> frontRight = new RateLimiter(new HardLimit(inputs.frontRight, -35.6, 35.6), 35.6 * 10);
-  public final RxVar<Double> frontLeft = new RateLimiter(new HardLimit(inputs.frontLeft, -35.6, 35.6), 35.6 * 10);
-  public final RxVar<Double> rearLeft = new RateLimiter(new HardLimit(inputs.rearLeft, -35.6, 35.6), 35.6 * 10);
-  public final RxVar<Double> rearRight = new RateLimiter(new HardLimit(inputs.rearRight, -35.6, 35.6), 35.6 * 10);
-  public final RxVar<Double> heaveFrontRight = new RateLimiter(new HardLimit(inputs.heaveFrontRight, -26.7, 26.7), 26.7 * 10);
-  public final RxVar<Double> heaveFrontLeft = new RateLimiter(new HardLimit(inputs.heaveFrontLeft, -26.7, 26.7), 26.7 * 10);
-  public final RxVar<Double> heaveRearLeft = new RateLimiter(new HardLimit(inputs.heaveRearLeft, -26.7, 26.7), 26.7 * 10);
-  public final RxVar<Double> heaveRearRight = new RateLimiter(new HardLimit(inputs.heaveRearRight, -26.7, 26.7), 26.7 * 10);
+  public final RxVar<Double> frontRight = new Delayer(new RateLimiter(new HardLimit(inputs.frontRight, -35.6, 35.6), 35.6 * 2), .02);
+  public final RxVar<Double> frontLeft = new Delayer(new RateLimiter(new HardLimit(inputs.frontLeft, -35.6, 35.6), 35.6 * 2), .02);
+  public final RxVar<Double> rearLeft = new Delayer(new RateLimiter(new HardLimit(inputs.rearLeft, -35.6, 35.6), 35.6 * 2), .02);
+  public final RxVar<Double> rearRight = new Delayer(new RateLimiter(new HardLimit(inputs.rearRight, -35.6, 35.6), 35.6 * 2), .02);
+  public final RxVar<Double> heaveFrontRight = new Delayer(new RateLimiter(new HardLimit(inputs.heaveFrontRight, -26.7, 26.7), 26.7 * 2), .02);
+  public final RxVar<Double> heaveFrontLeft = new Delayer(new RateLimiter(new HardLimit(inputs.heaveFrontLeft, -26.7, 26.7), 26.7 * 2), .02);
+  public final RxVar<Double> heaveRearLeft = new Delayer(new RateLimiter(new HardLimit(inputs.heaveRearLeft, -26.7, 26.7), 26.7 * 2), .02);
+  public final RxVar<Double> heaveRearRight = new Delayer(new RateLimiter(new HardLimit(inputs.heaveRearRight, -26.7, 26.7), 26.7 * 2), .02);
   
   public DangerZonaRenderer r;
   
@@ -57,9 +60,9 @@ public class DzHardwareSim implements DzHardware {
   }
 
   private void createSensors() {
-    outputs.depthSensor = new FirstOrderSystem(R.var(() -> {
-      return -physicsModel.get().kinematics.pos.z;
-    }), 10);
+    outputs.depthSensor = new Delayer(new FirstOrderSystem(R.var(() -> {
+      return -physicsModel.get().kinematics.pos.z + new Random().nextGaussian() * .02;
+    }), 10), .1);
     
     outputs.gyroRateX = R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();

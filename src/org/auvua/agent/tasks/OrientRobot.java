@@ -4,7 +4,6 @@ import javax.vecmath.Vector3d;
 
 import jama.Matrix;
 
-import org.auvua.agent.DzMotionController;
 import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DzMotionTranslator;
@@ -24,8 +23,6 @@ public class OrientRobot extends AbstractTask {
   
   @Override
   public void initialize() {
-    DzMotionController.setModel(robot);
-    
     robot.calcKinematics.get().orientation.asMatrix3d();
     
     RxVar<Matrix> robotOrientation = R.var(() -> {
@@ -33,7 +30,7 @@ public class OrientRobot extends AbstractTask {
       return robot.calcKinematics.get().orientation.asMatrix();
     });
     
-    DzMotionController.angAccel.setSupplier(() -> {
+    robot.motionController.torque.addSupplier(() -> {
       Rotation r = DzMotionTranslator.getRotation(robotOrientation.get(), orientation.get());
       
       Vector3d angVelVec = robot.calcKinematics.get().angVel;
@@ -49,14 +46,17 @@ public class OrientRobot extends AbstractTask {
       return out;
     });
     
-    DzMotionController.accel.setSupplier(() -> {
+    robot.motionController.force.addSupplier(() -> {
       Timer.getInstance().get();
       return new Matrix(new double[][] {
-          { 0, 5, 0 }
+          { 0, 0, 0 }
       }).transpose();
     });
+  }
+
+  @Override
+  public void terminate() {
     
-    DzMotionController.start();
   }
 
 }

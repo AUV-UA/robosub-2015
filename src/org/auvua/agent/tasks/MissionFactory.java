@@ -7,6 +7,8 @@ public class MissionFactory {
 
   public static Task build(MissionType type, DangerZona robot) {
     switch(type) {
+      case ROBOSUB_MISSION:
+        return new RobosubMission().getStartTask();
       case SQUARE_WALK:
         return new DrivingMission().getStartTask();
       case REMOTE_CONTROL:
@@ -19,6 +21,7 @@ public class MissionFactory {
   }
   
   public enum MissionType {
+    ROBOSUB_MISSION,
     RANDOM_WALK,
     SQUARE_WALK,
     MAINTAIN_DEPTH,
