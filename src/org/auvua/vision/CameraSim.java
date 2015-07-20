@@ -1,14 +1,8 @@
 package org.auvua.vision;
 
-import java.awt.Canvas;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-
-import javax.media.j3d.Canvas3D;
-import javax.media.j3d.ImageComponent;
-import javax.media.j3d.ImageComponent2D;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;

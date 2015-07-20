@@ -12,14 +12,12 @@ import javax.swing.JFrame;
 import javax.swing.JSlider;
 
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.RotatedRect;
 import org.opencv.core.Scalar;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 import org.opencv.imgproc.Imgproc;
 
@@ -92,19 +90,6 @@ public class TestMarkerVision {
 
       Imgproc.cvtColor(frame, rgb, Imgproc.COLOR_BGR2RGB);
       Imgproc.cvtColor(frame, hsv, Imgproc.COLOR_BGR2HSV);
-
-//      Scalar center = new Scalar(192, 174, 144);
-//      Scalar margin = new Scalar(45, 17, 12);
-//      
-//      Scalar lower = new Scalar(
-//          center.val[0] - margin.val[0],
-//          center.val[1] - margin.val[1],
-//          center.val[2] - margin.val[2]);
-//      
-//      Scalar upper = new Scalar(
-//          center.val[0] + margin.val[0],
-//          center.val[1] + margin.val[1],
-//          center.val[2] + margin.val[2]);
       
       String str = "";
       for (int i = 0; i < sliders.length; i++) {

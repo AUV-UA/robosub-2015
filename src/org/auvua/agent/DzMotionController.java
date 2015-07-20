@@ -3,6 +3,7 @@ package org.auvua.agent;
 import jama.Matrix;
 
 import org.auvua.agent.control.Timer;
+import org.auvua.agent.tasks.MotionMode;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaInputs;
 import org.auvua.model.dangerZona.DzMotionTranslator;
@@ -13,7 +14,7 @@ import org.auvua.reactive.core.RxVar;
 public class DzMotionController {
   
   public DangerZona robot;
-  public DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
+  public MotionMode mode = MotionMode.ABSOLUTE;
   
   public final RxAccumulator<Matrix> force =
       new RxAccumulator<Matrix>(new Matrix(3,1), (v1, v2) -> v1.plus(v2));
@@ -32,7 +33,7 @@ public class DzMotionController {
     this.start();
   }
   
-  public void setOrientationMode(DzOrientationMode mode) {
+  public void setOrientationMode(MotionMode mode) {
     this.mode = mode;
   }
   
@@ -53,7 +54,7 @@ public class DzMotionController {
       translator.force = force.get();
       translator.torque = torque.get();
       translator.orientation = robot.calcKinematics.get().orientation.asMatrix();
-      if (mode == DzOrientationMode.ABSOLUTE) {
+      if (mode == MotionMode.ABSOLUTE) {
         return translator.solveGlobal();
       } else {
         return translator.solveLocal();
@@ -83,11 +84,6 @@ public class DzMotionController {
     inputs.heaveFrontLeft.setSupplier(() -> 0.0);
     inputs.heaveRearLeft.setSupplier(() -> 0.0);
     inputs.heaveRearRight.setSupplier(() -> 0.0);
-  }
-  
-  public enum DzOrientationMode {
-    ABSOLUTE,
-    RELATIVE
   }
   
 }

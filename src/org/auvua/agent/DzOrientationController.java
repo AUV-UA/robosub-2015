@@ -15,7 +15,6 @@ import org.auvua.reactive.core.RxVar;
 public class DzOrientationController {
   
   private DangerZona robot;
-  private DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
   
   private Supplier<Matrix> torqueSupplier;
   public final RxVar<Matrix> orientation;
@@ -26,10 +25,6 @@ public class DzOrientationController {
     this.robot = robot;
     this.orientation = R.var(Matrix.identity(3, 3));
     this.start();
-  }
-  
-  public void setOrientationMode(DzOrientationMode mode) {
-    this.mode = mode;
   }
   
   public void start() {
@@ -63,11 +58,6 @@ public class DzOrientationController {
     started = false;
     
     robot.motionController.torque.removeSupplier(torqueSupplier);
-  }
-  
-  public enum DzOrientationMode {
-    ABSOLUTE,
-    RELATIVE
   }
   
 }
