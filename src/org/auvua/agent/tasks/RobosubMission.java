@@ -21,22 +21,74 @@ public class RobosubMission implements Mission {
         {0, 10, 0}
     }).transpose());
     
-    OrientRobot orient = new OrientRobot(robot, orientation);
-    MaintainDepth depth1 = new MaintainDepth(robot, R.var(2.5), .05);
-    MaintainDepth depth2 = new MaintainDepth(robot, R.var(0.0), .05);
-    Translate move1 = new Translate(robot, translate, 5);
+    //OrientRobot orient = new OrientRobot(robot, orientation);
+    MaintainDepth depth1 = new MaintainDepth(robot, R.var(1.5), .05);
+    MaintainDepth depth2 = new MaintainDepth(robot, R.var(1.5), .05);
+    MaintainDepth depth3 = new MaintainDepth(robot, R.var(0.0), .05);
+    
+    SearchForMarker markerSearch1 = new SearchForMarker(robot);
+    SearchForMarker markerSearch2 = new SearchForMarker(robot);
+    SearchForMarker markerSearch3 = new SearchForMarker(robot);
+    
+    AlignToMarker markerAlign1 = new AlignToMarker(robot);
+    AlignToMarker markerAlign2 = new AlignToMarker(robot);
+    AlignToMarker markerAlign3 = new AlignToMarker(robot);
+    
+    Translate move1 = new Translate(robot, translate, 60, MotionMode.RELATIVE);
+    Translate move2 = new Translate(robot, translate, 5, MotionMode.RELATIVE);
+    Translate move3 = new Translate(robot, translate, 60, MotionMode.RELATIVE);
+    Translate move4 = new Translate(robot, translate, 5, MotionMode.RELATIVE);
+    Translate move5 = new Translate(robot, translate, 60, MotionMode.RELATIVE);
+    Translate move6 = new Translate(robot, translate, 5, MotionMode.RELATIVE);
     
     depth1.atDepth.triggers(() -> {
-      move1.start();
-    });
-    
-    move1.finished.triggers(() -> {
-      move1.stop();
       depth1.stop();
       depth2.start();
+      move1.start();
+      markerSearch1.start();
     });
     
-    startTask = new CompositeTask(orient, depth1);
+    markerSearch1.markerFound.triggers(() -> {
+      move1.stop();
+      markerSearch1.stop();
+      markerAlign1.start();
+    });
+    
+    markerAlign1.aligned.triggers(() -> {
+      markerAlign1.stop();
+      move2.start();
+    });
+    
+    move2.finished.triggers(() -> {
+      move2.stop();
+      move3.start();
+      markerSearch2.start();
+    });
+    
+    markerSearch2.markerFound.triggers(() -> {
+      move3.stop();
+      markerSearch2.stop();
+      markerAlign2.start();
+    });
+    
+    markerAlign2.aligned.triggers(() -> {
+      markerAlign2.stop();
+      move4.start();
+    });
+    
+    move4.finished.triggers(() -> {
+      move4.stop();
+      move5.start();
+      markerSearch3.start();
+    });
+    
+    markerSearch3.markerFound.triggers(() -> {
+      move5.stop();
+      markerSearch3.stop();
+      markerAlign3.start();
+    });
+    
+    startTask = new CompositeTask(depth1);
   }
 
   @Override

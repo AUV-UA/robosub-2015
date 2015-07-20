@@ -38,7 +38,7 @@ public class Dashboard {
     sensorData.setEditable(false);
     
     frame.add(sensorData);
-    frame.add(or.universe.getCanvas());
+    frame.add(or.orientationCam.getCanvas3D());
     frame.addKeyListener(oi.getKeyListener());
     
     for(Component c : getAllComponents(frame)) {

@@ -1,4 +1,4 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent;
 
 import java.util.function.Supplier;
 
@@ -6,27 +6,36 @@ import javax.vecmath.Vector3d;
 
 import jama.Matrix;
 
-import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DzMotionTranslator;
 import org.auvua.model.dangerZona.DzMotionTranslator.Rotation;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 
-public class OrientRobot extends AbstractTask {
-
-  private RxVar<Matrix> orientation;
+public class DzOrientationController {
+  
   private DangerZona robot;
-  private Supplier<Matrix> forceSupplier;
+  private DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
+  
   private Supplier<Matrix> torqueSupplier;
-
-  public OrientRobot(DangerZona robot, RxVar<Matrix> orientation) {
+  public final RxVar<Matrix> orientation;
+  
+  private boolean started = false;
+  
+  public DzOrientationController(DangerZona robot) {
     this.robot = robot;
-    this.orientation = orientation;
+    this.orientation = R.var(Matrix.identity(3, 3));
+    this.start();
   }
   
-  @Override
-  public void initialize() {
+  public void setOrientationMode(DzOrientationMode mode) {
+    this.mode = mode;
+  }
+  
+  public void start() {
+    if (started) return;
+    started = true;
+    
     RxVar<Matrix> robotOrientation = R.var(() -> {
       return robot.calcKinematics.get().orientation.asMatrix();
     });
@@ -39,7 +48,7 @@ public class OrientRobot extends AbstractTask {
           {angVelVec.x, angVelVec.y, angVelVec.z}
       }).transpose();
       
-      Matrix angVelDesired = r.vector.times(r.angle * 5);
+      Matrix angVelDesired = r.vector.times(r.angle * 1);
       Matrix error = angVelDesired.minus(angVel);
       
       Matrix out = error.times(1);
@@ -47,21 +56,18 @@ public class OrientRobot extends AbstractTask {
       return out;
     };
     
-    forceSupplier = () -> {
-      Timer.getInstance().get();
-      return new Matrix(new double[][] {
-          { 0, 0, 0 }
-      }).transpose();
-    };
-    
     robot.motionController.torque.addSupplier(torqueSupplier);
-    robot.motionController.force.addSupplier(forceSupplier);
   }
-
-  @Override
-  public void terminate() {
+  
+  public void stop() {
+    started = false;
+    
     robot.motionController.torque.removeSupplier(torqueSupplier);
-    robot.motionController.force.removeSupplier(forceSupplier);
   }
-
+  
+  public enum DzOrientationMode {
+    ABSOLUTE,
+    RELATIVE
+  }
+  
 }

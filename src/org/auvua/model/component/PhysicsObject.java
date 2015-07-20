@@ -10,8 +10,9 @@ import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.Timer;
 import org.auvua.model.motion.Kinematics;
+import org.auvua.model.motion.Orientation;
 
-public abstract class PhysicsObject {
+public class PhysicsObject {
   
   public Kinematics kinematics;
   public Drag drag;
@@ -24,7 +25,9 @@ public abstract class PhysicsObject {
   
   private double lastTime = 0.0;
   
-  public PhysicsObject() {}
+  public PhysicsObject() {
+    this(new Kinematics());
+  }
   
   public PhysicsObject(Kinematics kinematics) {
     this.kinematics = kinematics;
@@ -128,6 +131,25 @@ public abstract class PhysicsObject {
     //System.out.println(dt + " " + kinematics.angAccel);
     
     lastTime = time;
+  }
+  
+  public Orientation getAbsoluteOrientation() {
+    if (parent == null) {
+      return kinematics.orientation;
+    }
+    Matrix3d or = new Matrix3d();
+    or.mul(parent.getAbsoluteOrientation().asMatrix3d(), kinematics.orientation.asMatrix3d());
+    return new Orientation(Orientation.mat3dToMat(or));
+  }
+  
+  public Vector3d getAbsolutePosition() {
+    if (parent == null) {
+      return kinematics.pos;
+    }
+    Vector3d pos = new Vector3d(kinematics.pos);
+    parent.getAbsoluteOrientation().asMatrix3d().transform(pos);
+    pos.add(parent.getAbsolutePosition());
+    return pos;
   }
 
 }

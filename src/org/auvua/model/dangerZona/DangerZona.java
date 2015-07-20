@@ -4,10 +4,12 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.DzMotionController;
+import org.auvua.agent.DzOrientationController;
 import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
+import org.opencv.core.Core;
 
 
 public class DangerZona {
@@ -17,6 +19,7 @@ public class DangerZona {
   public final DzHardware hardware;
   public final RxVar<DzCalculatedKinematics> calcKinematics;
   public final RxVar<DzMotionTranslator> motionTranslator;
+  public final DzOrientationController orientationController;
   public final DzMotionController motionController;
   
   public DangerZona(DzHardware hw) {
@@ -36,7 +39,7 @@ public class DangerZona {
     });
     
     this.motionController = new DzMotionController(this);
-    this.motionController.start();
+    this.orientationController = new DzOrientationController(this);
   }
   
   public void update() {

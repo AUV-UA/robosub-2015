@@ -1,5 +1,7 @@
 package org.auvua.model.dangerZona;
 
+import org.opencv.core.Core;
+
 
 public class DangerZonaFactory {
   
@@ -18,6 +20,7 @@ public class DangerZonaFactory {
   }
   
   public static DangerZona buildDangerZona() {
+    System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
     DzHardware hardware = new DzHardwareSim();
     DangerZona model = new DangerZona(hardware);
     return model;

@@ -3,23 +3,17 @@ package org.auvua.vision;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import org.opencv.core.Mat;
 import org.opencv.highgui.VideoCapture;
 
-public class Camera {
-	Map<String,ImageFilter> filters = new HashMap<String,ImageFilter>();
-	Map<String,Object> filterOutputs = new HashMap<String,Object>();
-	
-	Mat rawImage = new Mat();
-	VideoCapture camera;
+public class Camera implements ImageSource {
+  Mat rawImage = new Mat();
+	VideoCapture capture;
 	
 	public Camera() {
-		camera = new VideoCapture(0);
-	    if(!camera.isOpened()){
+		capture = new VideoCapture(0);
+	    if(!capture.isOpened()){
 	        System.out.println("Camera Error");
 	    }
 	    else{
@@ -28,8 +22,8 @@ public class Camera {
 	}
 	
 	public Camera(int deviceNumber) {
-		camera = new VideoCapture(deviceNumber);
-	    if(!camera.isOpened()){
+		capture = new VideoCapture(deviceNumber);
+	    if(!capture.isOpened()){
 	        System.out.println("Camera Error");
 	    }
 	    else{
@@ -37,32 +31,12 @@ public class Camera {
 	    }
 	}
 	
-	public void addFilter(String filterName, ImageFilter toAdd) {
-		filters.put(filterName,toAdd);
-		filterOutputs.put(filterName, toAdd.getFilterValues());
-	}
-	
-	public void removeFilter(String filterName) {
-		filters.remove(filterName);
-	}
-	
 	public void capture() {
-		camera.read(rawImage);
+		capture.read(rawImage);
 	}
 	
 	public Image getImage() {
 		return toBufferedImage(rawImage);
-	}
-	
-	public void applyFilters() {
-		Set<String> filterNames = filters.keySet();
-		for(String s : filterNames) {
-			filterOutputs.put(s, filters.get(s).filter(rawImage));
-		}
-	}
-	
-	public Map<String,Object> getFilterOutputs() {
-		return filterOutputs;
 	}
 	
 	public static Image toBufferedImage(Mat m){
@@ -79,4 +53,9 @@ public class Camera {
 	      return image;
 
 	  }
+
+  @Override
+  public Mat getMat() {
+    return rawImage;
+  }
 }

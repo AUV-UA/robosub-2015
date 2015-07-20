@@ -9,14 +9,26 @@ import org.auvua.model.dangerZona.DangerZona;
 
 public class Translate extends AbstractTask {
 
+  private MotionMode mode;
   private DangerZona robot;
-  private Supplier<Matrix> vectorSupplier;
+  private Supplier<Matrix> preSupplier;
+  private Supplier<Matrix> postSupplier;
   public TaskCondition finished;
   private double startTime;
 
-  public Translate(DangerZona robot, Supplier<Matrix> vectorSupplier, double time) {
+  public Translate(DangerZona robot, Supplier<Matrix> preSupplier, double time) {
+    this.mode = MotionMode.ABSOLUTE;
     this.robot = robot;
-    this.vectorSupplier = vectorSupplier;
+    this.preSupplier = preSupplier;
+    this.finished = createCondition("finished", () -> {
+      return Timer.getInstance().get() > startTime + time;
+    });
+  }
+  
+  public Translate(DangerZona robot, Supplier<Matrix> preSupplier, double time, MotionMode mode) {
+    this.mode = mode;
+    this.robot = robot;
+    this.preSupplier = preSupplier;
     this.finished = createCondition("finished", () -> {
       return Timer.getInstance().get() > startTime + time;
     });
@@ -25,12 +37,22 @@ public class Translate extends AbstractTask {
   @Override
   public void initialize() {
     startTime = Timer.getInstance().get();
-    robot.motionController.force.addSupplier(vectorSupplier);
+    
+    postSupplier = () -> {
+      Matrix or = robot.calcKinematics.get().orientation.asMatrix();
+      Matrix pre = preSupplier.get();
+      if (this.mode == MotionMode.RELATIVE) {
+        return or.times(pre);
+      }
+      return pre;
+    };
+    
+    robot.motionController.force.addSupplier(postSupplier);
   }
 
   @Override
   public void terminate() {
-    robot.motionController.force.removeSupplier(vectorSupplier);
+    robot.motionController.force.removeSupplier(postSupplier);
   }
 
 }

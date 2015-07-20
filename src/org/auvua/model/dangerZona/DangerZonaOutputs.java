@@ -2,6 +2,7 @@ package org.auvua.model.dangerZona;
 
 import org.auvua.agent.TwoVector;
 import org.auvua.reactive.core.RxVar;
+import org.auvua.vision.ImageSource;
 
 public class DangerZonaOutputs {
   public RxVar<Double> depthSensor;
@@ -16,4 +17,7 @@ public class DangerZonaOutputs {
   
   public TwoVector positionSensor;
   public TwoVector velocitySensor;
+  
+  public RxVar<ImageSource> frontCamera;
+  public RxVar<ImageSource> downCamera;
 }

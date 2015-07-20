@@ -14,6 +14,7 @@ import org.auvua.agent.signal.Integrator;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 import org.auvua.view.DangerZonaRenderer;
+import org.auvua.vision.CameraSim;
 
 public class DzHardwareSim implements DzHardware {
   
@@ -62,7 +63,7 @@ public class DzHardwareSim implements DzHardware {
   private void createSensors() {
     outputs.depthSensor = new Delayer(new FirstOrderSystem(R.var(() -> {
       return -physicsModel.get().kinematics.pos.z + new Random().nextGaussian() * .02;
-    }), 10), .1);
+    }), 10), .02);
     
     outputs.gyroRateX = R.var(() -> {
       DangerZonaPhysicsModel robot = physicsModel.get();
@@ -115,6 +116,23 @@ public class DzHardwareSim implements DzHardware {
         new Integrator(R.var(() -> {
           return physicsModel.get().kinematics.pos.y;
         }), Timer.getInstance()));
+    
+    outputs.frontCamera = R.var(new CameraSim(r.frontCameraCanvas));
+    outputs.downCamera = R.var(new CameraSim(r.downCameraCanvas));
+    
+    r.frontCameraCanvas.beginCapturing(true);
+    r.downCameraCanvas.beginCapturing(true);
+    
+    outputs.frontCamera.setModifier((camera) -> {
+      this.physicsModel.get();
+      camera.capture();
+    });
+    
+    outputs.downCamera.setModifier((camera) -> {
+      this.physicsModel.get();
+      camera.capture();
+    });
+
   }
 
   @Override

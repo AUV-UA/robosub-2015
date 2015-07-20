@@ -13,6 +13,13 @@ public class Orientation {
   public final Vector3d localZ; // yaw
   public Matrix mat;
   
+  public Orientation(Matrix mat) {
+    this.mat = mat;
+    localX = new Vector3d(mat.get(0, 0), mat.get(1, 0), mat.get(2, 0));
+    localY = new Vector3d(mat.get(0, 1), mat.get(1, 1), mat.get(2, 1));
+    localZ = new Vector3d(mat.get(0, 2), mat.get(1, 2), mat.get(2, 2));
+  }
+  
   public Orientation() {
     localX = new Vector3d(1,0,0);
     localY = new Vector3d(0,1,0);

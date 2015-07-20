@@ -26,7 +26,7 @@ public class DangerZonaAgent {
   public static void main( String[] args ) throws SecurityException, IOException {
     buildFrames();
     
-    Task task = MissionFactory.build(MissionType.REMOTE_CONTROL, robot);
+    Task task = MissionFactory.build(MissionType.ROBOSUB_MISSION, robot);
     task.start();
     
     Timer.getInstance().scale(1.0);

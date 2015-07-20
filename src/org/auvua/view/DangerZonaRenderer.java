@@ -1,20 +1,30 @@
 package org.auvua.view;
 
+import java.awt.Component;
+
 import javax.media.j3d.Appearance;
 import javax.media.j3d.Background;
 import javax.media.j3d.BoundingSphere;
 import javax.media.j3d.BranchGroup;
+import javax.media.j3d.DirectionalLight;
 import javax.media.j3d.Group;
+import javax.media.j3d.Locale;
+import javax.media.j3d.Material;
+import javax.media.j3d.Node;
 import javax.media.j3d.Transform3D;
 import javax.media.j3d.TransformGroup;
+import javax.swing.JFrame;
 import javax.vecmath.AxisAngle4d;
+import javax.vecmath.Color3f;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3f;
 
 import org.auvua.model.dangerZona.DangerZonaPhysicsModel;
+import org.auvua.vision.CapturingCanvas3D;
 
+import com.sun.j3d.utils.geometry.Box;
 import com.sun.j3d.utils.geometry.ColorCube;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
@@ -22,13 +32,28 @@ import com.sun.j3d.utils.universe.SimpleUniverse;
 
 public class DangerZonaRenderer {
   
-  private TransformGroup objTrans;
-  private Transform3D trans;
   public SimpleUniverse universe;
   private DangerZonaPhysicsModel robot;
-  public Transform3D viewTrans;
-  public Vector3d cameraPos = new Vector3d(20.0, -20.0, 20.0);
-  public BranchGroup group;
+  
+  private TransformGroup robotTG = new TransformGroup();
+  private Transform3D robotTrans = new Transform3D();
+  
+  CapturingCameraView frontCamera = new CapturingCameraView(400, 400, false);
+  private Transform3D frontCameraTrans = new Transform3D();
+  
+  CapturingCameraView downCamera = new CapturingCameraView(400, 400, false);
+  private Transform3D downCameraTrans = new Transform3D();
+  
+  public Transform3D viewTrans = new Transform3D();
+
+  public Vector3d cameraPos = new Vector3d(5.0, -5.0, 5.0);
+  public BranchGroup rootGroup;
+  
+  public CapturingCanvas3D frontCameraCanvas;
+  public CapturingCanvas3D downCameraCanvas;
+  
+  public Component frontCameraComponent;
+  public Component downCameraComponent;
   
   private static DangerZonaRenderer instance;
   
@@ -40,23 +65,21 @@ public class DangerZonaRenderer {
   }
   
   public DangerZonaRenderer(DangerZonaPhysicsModel robot) {
+    
     this.robot = robot;
     
     universe = new SimpleUniverse();
+    Locale locale = new Locale(universe);
 
-    group = new BranchGroup();
-    group.setCapability(Group.ALLOW_CHILDREN_EXTEND);
+    rootGroup = new BranchGroup();
+    rootGroup.setCapability(Group.ALLOW_CHILDREN_EXTEND);
     
-    objTrans = new TransformGroup();
-    objTrans.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-    trans = new Transform3D();
-    trans.setTranslation(new Vector3f(0.0f,0.0f,0.0f));
-    objTrans.setTransform(trans);
-    objTrans.addChild(new ColorCube(1.0));
+    robotTG.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+    robotTG.setTransform(robotTrans);
+    robotTG.addChild(new ColorCube(0.35));
 
-    group.addChild(objTrans);
-
-    viewTrans = new Transform3D();
+    rootGroup.addChild(robotTG);
+    
     viewTrans.setTranslation(cameraPos);
     
     double s2 = 1.0 / Math.sqrt(2.0);
@@ -69,11 +92,31 @@ public class DangerZonaRenderer {
         0.0, s23, s3
     }));
     
+    JFrame fcFrame = new JFrame();
+    fcFrame.add(frontCamera.getCanvas3D());
+    fcFrame.setVisible(true);
+    fcFrame.setSize(400, 400);
+    frontCameraComponent = fcFrame.getRootPane();
+    
+    JFrame dcFrame = new JFrame();
+    dcFrame.add(downCamera.getCanvas3D());
+    dcFrame.setVisible(true);
+    dcFrame.setSize(400, 400);
+    downCameraComponent = dcFrame.getRootPane();
+    
+    frontCameraCanvas = frontCamera.getCanvas3D();
+    downCameraCanvas = downCamera.getCanvas3D();
+
+    locale.addBranchGraph( frontCamera.getRootBG() );
+    locale.addBranchGraph( downCamera.getRootBG() );
+    
     universe.getViewingPlatform().getViewPlatformTransform().setTransform(viewTrans);
     universe.getViewer().getView().setBackClipDistance(1000.0f);
+    
+    addDirectionalLight(new Vector3f(0.0f, 0.0f, -1.0f), new Color3f(.5f, .5f, .5f));
 
-    universe.addBranchGraph(group);
     universe.addBranchGraph(createSceneGraph());
+    universe.addBranchGraph(rootGroup);
   }
   
   public void update() {
@@ -100,9 +143,18 @@ public class DangerZonaRenderer {
     
     Matrix3d rotation = robot.kinematics.orientation.asMatrix3d();
     
-    trans.setTranslation(robot.kinematics.pos);
-    trans.setRotation(rotation);
-    objTrans.setTransform(trans);
+    robotTrans.setTranslation(robot.kinematics.pos);
+    robotTrans.setRotation(rotation);
+    robotTG.setTransform(robotTrans);
+    
+    frontCameraTrans.setRotation(robot.frontCamera.getAbsoluteOrientation().asMatrix3d());
+    frontCameraTrans.setTranslation(robot.frontCamera.getAbsolutePosition());
+    
+    downCameraTrans.setRotation(robot.downCamera.getAbsoluteOrientation().asMatrix3d());
+    downCameraTrans.setTranslation(robot.downCamera.getAbsolutePosition());
+    
+    frontCamera.getViewPlatformTransformGroup().setTransform( frontCameraTrans );
+    downCamera.getViewPlatformTransformGroup().setTransform( downCameraTrans );
   }
   
   public BranchGroup createSceneGraph() {
@@ -113,6 +165,20 @@ public class DangerZonaRenderer {
     Background bg = new Background();
     bg.setApplicationBounds(bounds);
     BranchGroup backGeoBranch = new BranchGroup();
+    
+    Appearance floorAppearance = new Appearance();
+    Material floorMat = new Material();
+    floorMat.setDiffuseColor(new Color3f(.31f, .49f, .49f));
+    floorMat.setSpecularColor(new Color3f(.31f, .49f, .49f));
+    floorMat.setShininess(1.0f);
+    floorAppearance.setMaterial(floorMat);
+    Box floor = new Box(100f, 100f, .02f, Box.GENERATE_NORMALS, floorAppearance);
+    TransformGroup floorTrans = new TransformGroup();
+    Transform3D floorTransform = new Transform3D();
+    floorTransform.setTranslation(new Vector3d(0, 0, -5.5));
+    floorTrans.setTransform(floorTransform);
+    floorTrans.addChild(floor);
+    
     Sphere sphereObj = new Sphere(1.1f, Sphere.GENERATE_NORMALS
         | Sphere.GENERATE_NORMALS_INWARD
         | Sphere.GENERATE_TEXTURE_COORDS, 45);
@@ -133,9 +199,45 @@ public class DangerZonaRenderer {
     if (tex != null) {
       backgroundApp.setTexture(tex.getTexture());
     }
+    
     objRoot.addChild(bg);
+    objRoot.addChild(createFloorMarker(new Vector3d(0, 10.0, -5.0), Math.PI / 3));
+    objRoot.addChild(createFloorMarker(new Vector3d(-7.32, 15.0, -5.0), 2 * Math.PI / 3));
+    objRoot.addChild(createFloorMarker(new Vector3d(-14.64, 10.0, -5.0), 0));
+    objRoot.addChild(floorTrans);
  
     return objRoot;
 }
+  
+  private Node createFloorMarker(Vector3d vector3d, double d) {
+    Appearance markerAppearance = new Appearance();
+    Material markerMat = new Material();
+    markerMat.setDiffuseColor(new Color3f(.8f, .69f, .55f));
+    markerMat.setSpecularColor(new Color3f(.8f, .69f, .55f));
+    markerMat.setShininess(1.0f);
+    markerAppearance.setMaterial(markerMat);
+    Box marker = new Box(.152f, 1.219f, .02f, Box.GENERATE_NORMALS, markerAppearance);
+    TransformGroup markerTrans = new TransformGroup();
+    Transform3D markerTransform = new Transform3D();
+    markerTransform.setTranslation(vector3d);
+    markerTransform.setRotation(new AxisAngle4d(0, 0, 1.0, d));
+    markerTrans.setTransform(markerTransform);
+    markerTrans.addChild(marker);
+    return markerTrans;
+  }
+
+  public void addDirectionalLight(Vector3f direction, Color3f color) {
+    // Creates a bounding sphere for the lights
+    BoundingSphere bounds = new BoundingSphere();
+    bounds.setRadius(1000d);
+
+    // Then create a directional light with the given
+    // direction and color
+    DirectionalLight lightD = new DirectionalLight(color, direction);
+    lightD.setInfluencingBounds(bounds);
+
+    // Then add it to the root BranchGroup
+    rootGroup.addChild(lightD);
+  }
   
 }

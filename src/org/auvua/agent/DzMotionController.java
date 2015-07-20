@@ -12,8 +12,6 @@ import org.auvua.reactive.core.RxVar;
 
 public class DzMotionController {
   
-  public static DzMotionController instance;
-  
   public DangerZona robot;
   public DzOrientationMode mode = DzOrientationMode.ABSOLUTE;
   
@@ -24,6 +22,8 @@ public class DzMotionController {
   
   private DangerZonaInputs inputs;
   private final DzMotionTranslator translator;
+  
+  private boolean started = false;
   
   public DzMotionController(DangerZona robot) {
     this.robot = robot;
@@ -37,6 +37,9 @@ public class DzMotionController {
   }
   
   public void start() {
+    if (started) return;
+    started = true;
+    
     force.addSupplier(() -> {
       Timer.getInstance().get();
       return new Matrix(3,1);
@@ -69,6 +72,8 @@ public class DzMotionController {
   }
   
   public void stop() {
+    started = false;
+    
     inputs.frontRight.setSupplier(() -> 0.0);
     inputs.frontLeft.setSupplier(() -> 0.0);
     inputs.rearLeft.setSupplier(() -> 0.0);
