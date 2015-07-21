@@ -1,5 +1,7 @@
 package org.auvua.model.dangerZona;
 
+import org.auvua.model.dangerZona.hardware.DzHardware;
+import org.auvua.model.dangerZona.hardware.DzHardwareSim;
 import org.opencv.core.Core;
 
 

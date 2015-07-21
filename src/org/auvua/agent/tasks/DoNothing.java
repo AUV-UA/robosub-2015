@@ -2,7 +2,7 @@ package org.auvua.agent.tasks;
 
 import org.auvua.agent.control.OpenLoopController;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DangerZonaInputs;
+import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
 
 public class DoNothing extends AbstractTask {
   

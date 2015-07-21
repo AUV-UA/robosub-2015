@@ -1,16 +1,14 @@
-package org.auvua.model.dangerZona;
+package org.auvua.model.dangerZona.hardware;
 
 import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
-import org.auvua.agent.TwoVector;
 import org.auvua.agent.control.HardLimit;
 import org.auvua.agent.control.RateLimiter;
-import org.auvua.agent.control.Timer;
 import org.auvua.agent.signal.Delayer;
 import org.auvua.agent.signal.FirstOrderSystem;
-import org.auvua.agent.signal.Integrator;
+import org.auvua.model.dangerZona.DangerZonaPhysicsModel;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 import org.auvua.view.DangerZonaRenderer;
@@ -19,13 +17,6 @@ import org.auvua.vision.CameraSim;
 public class DzHardwareSim implements DzHardware {
   
   public RxVar<DangerZonaPhysicsModel> physicsModel = R.var(DangerZonaPhysicsModel.getInstance());
-  
-  public RxVar<Double> depthSensor;
-  public RxVar<Double> gyroRateX;
-  public RxVar<Double> gyroRateY;
-  public RxVar<Double> gyroRateZ;
-  public TwoVector positionSensor;
-  public TwoVector velocitySensor;
   
   public DangerZonaInputs inputs = new DangerZonaInputs();
   public DangerZonaOutputs outputs = new DangerZonaOutputs();
@@ -100,22 +91,6 @@ public class DzHardwareSim implements DzHardware {
       accel.add(new Vector3d(0.0, 0.0, -9.81));
       return robot.kinematics.orientation.localZ.dot(accel);
     }), 10);
-    
-    outputs.velocitySensor = new TwoVector(
-        new FirstOrderSystem(R.var(() -> {
-          return physicsModel.get().kinematics.vel.x;
-        }), 10),
-        new FirstOrderSystem(R.var(() -> {
-          return physicsModel.get().kinematics.vel.y;
-        }), 10));
-    
-    outputs.positionSensor = new TwoVector(
-        new Integrator(R.var(() -> {
-          return physicsModel.get().kinematics.pos.x;
-        }), Timer.getInstance()),
-        new Integrator(R.var(() -> {
-          return physicsModel.get().kinematics.pos.y;
-        }), Timer.getInstance()));
     
     outputs.frontCamera = R.var(new CameraSim(r.frontCameraCanvas));
     outputs.downCamera = R.var(new CameraSim(r.downCameraCanvas));

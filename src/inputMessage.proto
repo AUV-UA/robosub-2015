@@ -1,0 +1,15 @@
+package org.auvua.model.dangerZona.hardware.proto;
+
+option java_package = "org.auvua.model.dangerZona.hardware.proto";
+option java_outer_classname = "InputMessageProto";
+
+message InputMessage {
+  repeated double motor = 1;
+  repeated bool actuator = 2;
+  repeated bool switch = 3;
+  required bool frontGoPro = 4;
+  required bool downGoPro = 5;
+  required double lightRed = 6;
+  required double lightGreen = 7;
+  required double lightBlue = 8;
+}

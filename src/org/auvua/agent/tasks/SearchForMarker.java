@@ -15,7 +15,6 @@ public class SearchForMarker extends AbstractTask {
   
   public SearchForMarker(DangerZona robot) {
     this.robot = robot;
-    
     this.markerFound = createCondition("markerFound", found);
   }
   

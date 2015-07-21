@@ -12,7 +12,7 @@ import javax.swing.JTextArea;
 
 import org.auvua.agent.oi.OperatorInterface;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DangerZonaOutputs;
+import org.auvua.model.dangerZona.hardware.DangerZonaOutputs;
 
 public class Dashboard {
   

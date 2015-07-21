@@ -13,8 +13,8 @@ import org.auvua.agent.tasks.MissionFactory;
 import org.auvua.agent.tasks.Task;
 import org.auvua.agent.tasks.MissionFactory.MissionType;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DangerZonaInputs;
-import org.auvua.model.dangerZona.DangerZonaOutputs;
+import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
+import org.auvua.model.dangerZona.hardware.DangerZonaOutputs;
 import org.auvua.view.RChart;
 
 public class DangerZonaAgent {
@@ -32,9 +32,6 @@ public class DangerZonaAgent {
     Timer.getInstance().scale(1.0);
     
     DataRecorder recorder = new DataRecorder("data2.txt");
-    recorder.record(robot.hardware.getOutputs().positionSensor.x, "xPos");
-    recorder.record(robot.hardware.getOutputs().positionSensor.y, "yPos");
-    recorder.record(robot.hardware.getOutputs().velocitySensor.x, "yVel");
     recorder.start();
     
     Timer.getInstance().reset(); // Begin timing

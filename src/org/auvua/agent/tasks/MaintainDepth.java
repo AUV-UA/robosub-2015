@@ -8,7 +8,7 @@ import org.auvua.agent.control.PidController;
 import org.auvua.agent.signal.Differentiator;
 import org.auvua.agent.signal.MovingAverageExponential;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DangerZonaOutputs;
+import org.auvua.model.dangerZona.hardware.DangerZonaOutputs;
 import org.auvua.reactive.core.RxVar;
 
 public class MaintainDepth extends AbstractTask {

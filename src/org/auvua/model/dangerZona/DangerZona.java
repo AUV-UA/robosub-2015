@@ -7,6 +7,7 @@ import org.auvua.agent.DzMotionController;
 import org.auvua.agent.DzOrientationController;
 import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
+import org.auvua.model.dangerZona.hardware.DzHardware;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 import org.opencv.core.Core;
