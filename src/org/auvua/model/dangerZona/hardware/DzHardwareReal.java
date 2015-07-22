@@ -21,6 +21,8 @@ public class DzHardwareReal implements DzHardware {
   public DangerZonaInputs inputs = new DangerZonaInputs();
   public DangerZonaOutputs outputs = new DangerZonaOutputs();
   
+  private DzHardwareSocket socket = new DzHardwareSocket();
+  
   public RxVar<InputMessage> inputMessage = R.var(() -> {
     return InputMessage.newBuilder()
         .setMotor      (FRONT_RIGHT_MOTOR,       inputs.frontRight.get())
@@ -61,8 +63,14 @@ public class DzHardwareReal implements DzHardware {
   
   public RxVar<OutputMessage> outputMessage = R.var(() -> {
     byte[] encodedInput = inputMessage.get().toByteArray();
-    // ZMQ req/rep here
-    return OutputMessage.newBuilder().build();
+    byte[] encodedOutput = socket.sendData(encodedInput);
+    OutputMessage outputMessage = null;
+    try {
+      outputMessage = OutputMessage.parseFrom(encodedOutput);
+    } catch (Exception e) {
+      // Handle this
+    }
+    return outputMessage;
   });
   
   public DzHardwareReal() {
