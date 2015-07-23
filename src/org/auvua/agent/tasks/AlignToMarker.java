@@ -42,12 +42,12 @@ public class AlignToMarker extends AbstractTask {
       imSource.capture();
       filter.filter(imSource.getMat());
     });
-    
+    /*
     RxVar<CameraViewer> cvVar = R.var(new CameraViewer());
     cvVar.setModifier((viewer) -> {
       viewer.setImageFromMat(filterVar.get().imageOut);
     });
-    
+    */
     RxVar<Double> xPos = R.var(() -> {
       return filterVar.get().imageCenterX - filterVar.get().xPosition;
     });

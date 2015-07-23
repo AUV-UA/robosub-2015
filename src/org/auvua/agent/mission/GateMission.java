@@ -1,25 +1,30 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent.mission;
 
 import jama.Matrix;
 
+import org.auvua.agent.tasks.MaintainDepth;
+import org.auvua.agent.tasks.MotionMode;
+import org.auvua.agent.tasks.SearchMoveAndAlign;
+import org.auvua.agent.tasks.Task;
+import org.auvua.agent.tasks.Translate;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 
-public class RobosubMission implements Mission {
+public class GateMission implements Mission {
   
   public final DangerZona robot;
   private Task startTask;
   
-  public RobosubMission(DangerZona robot) {
+  public GateMission(DangerZona robot) {
     this.robot = robot;
     
     RxVar<Matrix> translate = R.var(new Matrix(new double[][] {
         {0, 10, 0}
     }).transpose());
     
-    MaintainDepth depth1 = new MaintainDepth(robot, R.var(1.5), .05);
-    MaintainDepth depth2 = new MaintainDepth(robot, R.var(1.5), .05);
+    MaintainDepth depth1 = new MaintainDepth(robot, R.var(0.2), .05);
+    MaintainDepth depth2 = new MaintainDepth(robot, R.var(0.2), .05);
     MaintainDepth depth3 = new MaintainDepth(robot, R.var(0.0), .05);
     
     Translate move1 = new Translate(robot, translate, 5, MotionMode.RELATIVE);

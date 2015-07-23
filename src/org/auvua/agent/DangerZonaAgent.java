@@ -7,7 +7,7 @@ import java.util.Map;
 import org.auvua.MissionConfig;
 import org.auvua.agent.control.DataRecorder;
 import org.auvua.agent.control.Timer;
-import org.auvua.agent.tasks.MissionFactory;
+import org.auvua.agent.mission.MissionFactory;
 import org.auvua.agent.tasks.Task;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaFactory;

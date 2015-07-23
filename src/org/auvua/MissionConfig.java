@@ -1,6 +1,6 @@
 package org.auvua;
 
-import org.auvua.agent.tasks.MissionFactory.MissionType;
+import org.auvua.agent.mission.MissionFactory.MissionType;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
 
 public class MissionConfig {

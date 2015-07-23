@@ -1,5 +1,10 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent.mission;
 
+import org.auvua.agent.tasks.AwaitMissionStart;
+import org.auvua.agent.tasks.AwaitMissionStop;
+import org.auvua.agent.tasks.DoNothing;
+import org.auvua.agent.tasks.RemoteControl;
+import org.auvua.agent.tasks.Task;
 import org.auvua.model.dangerZona.DangerZona;
 
 public class MissionFactory {

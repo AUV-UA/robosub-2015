@@ -31,10 +31,12 @@ public class SearchForMarker extends AbstractTask {
     
     found.setSupplier(() -> filterVar.get().markerVisible);
     
+    /*
     RxVar<CameraViewer> cvVar = R.var(new CameraViewer());
     cvVar.setModifier((viewer) -> {
       viewer.setImageFromMat(filterVar.get().imageOut);
     });
+    */
   }
 
   @Override
