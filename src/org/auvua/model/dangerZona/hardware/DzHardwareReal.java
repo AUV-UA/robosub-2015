@@ -1,6 +1,7 @@
 package org.auvua.model.dangerZona.hardware;
 
 import org.auvua.agent.control.Timer;
+import org.auvua.model.MotionUtil;
 import org.auvua.model.dangerZona.hardware.proto.InputMessageProto.InputMessage;
 import org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage;
 import org.auvua.reactive.core.R;
@@ -26,14 +27,14 @@ public class DzHardwareReal implements DzHardware {
   public RxVar<InputMessage> inputMessage = R.var(() -> {
     return InputMessage.newBuilder()
         // 10 PWM Outputs
-        .addMotor      (inputs.frontRight.get())
-        .addMotor      (inputs.frontLeft.get())
-        .addMotor      (inputs.rearLeft.get())
-        .addMotor      (inputs.rearRight.get())
-        .addMotor      (inputs.heaveFrontRight.get())
-        .addMotor      (inputs.heaveFrontLeft.get())
-        .addMotor      (inputs.heaveRearLeft.get())
-        .addMotor      (inputs.heaveRearRight.get())
+        .addMotor      (MotionUtil.clamp(inputs.heaveRearLeft.get() / 26.7))
+        .addMotor      (MotionUtil.clamp(-inputs.rearRight.get() / 35.6))
+        .addMotor      (MotionUtil.clamp(-inputs.heaveRearRight.get() / 26.7))
+        .addMotor      (MotionUtil.clamp(-inputs.rearLeft.get() / 35.6))
+        .addMotor      (MotionUtil.clamp(-inputs.heaveFrontRight.get() / 26.7))
+        .addMotor      (MotionUtil.clamp(inputs.frontLeft.get() / 35.6))
+        .addMotor      (MotionUtil.clamp(inputs.heaveFrontLeft.get() / 26.7))
+        .addMotor      (MotionUtil.clamp(inputs.frontRight.get() / 35.6))
         .addMotor      (0.0)
         .addMotor      (0.0)
         // 10 Actuators
@@ -84,6 +85,7 @@ public class DzHardwareReal implements DzHardware {
   private void createSensors() {
     outputs.depthSensor = R.var(() ->  outputMessage.get().getDepth() );
     outputs.humidity = R.var(() -> outputMessage.get().getHumidity());
+    outputs.missionSwitch = R.var(() -> outputMessage.get().getMission());
     
     outputs.gyroRateX = R.var(() -> outputMessage.get().getGyroX());
     outputs.gyroRateY = R.var(() -> outputMessage.get().getGyroY());

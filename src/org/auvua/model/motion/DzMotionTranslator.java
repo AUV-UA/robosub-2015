@@ -1,4 +1,4 @@
-package org.auvua.model.dangerZona;
+package org.auvua.model.motion;
 
 import org.auvua.util.MatrixUtil;
 

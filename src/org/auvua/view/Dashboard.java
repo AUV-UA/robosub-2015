@@ -3,12 +3,13 @@ package org.auvua.view;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JTextArea;
+import javax.swing.JPanel;
 
 import org.auvua.agent.oi.TeleopKeyListener;
 import org.auvua.model.dangerZona.DangerZona;
@@ -23,7 +24,8 @@ public class Dashboard {
   public final OrientationRenderer or;
 
   private JFrame frame;
-  private JTextArea sensorData = new JTextArea(5,30);
+  private JPanel cameraPanel = new JPanel(new GridLayout(2,1));
+  private JPanel rightPanel = new JPanel(new GridLayout(2,1));
 
   public Dashboard(DangerZona robot) {
     this.robot = robot;
@@ -34,22 +36,7 @@ public class Dashboard {
 
   public void update() {
     or.update();
-
-    DangerZonaOutputs outputs = robot.hardware.getOutputs();
-
-    sensorData.setText(String.format(
-        "GyroX: %-12.4f\n" +
-            "GyroY: %-12.4f\n" +
-            "GyroZ: %-12.4f\n" +
-            "AccelX: %-12.4f\n" +
-            "AccelY: %-12.4f\n" +
-            "AccelZ: %-12.4f\n",
-            outputs.gyroRateX.get(),
-            outputs.gyroRateY.get(),
-            outputs.gyroRateZ.get(),
-            outputs.accelX.get(),
-            outputs.accelY.get(),
-            outputs.accelZ.get()));
+    frame.repaint();
   }
 
   public static List<Component> getAllComponents(final Container c) {
@@ -65,18 +52,14 @@ public class Dashboard {
   
   private void buildFrame() {
     frame = new JFrame();
-    frame.setSize(new Dimension(800, 600));
+    frame.setLayout(new GridLayout(1,2));
+    frame.setSize(new Dimension(1280, 720));
     frame.setVisible(true);
-    frame.setLayout(new FlowLayout());
-    sensorData.setEditable(false);
+    
+    frame.add(cameraPanel);
+    frame.add(rightPanel);
 
-    frame.add(sensorData);
-    frame.add(or.orientationCam.getCanvas3D());
-    frame.addKeyListener(tkl.getKeyListener());
-
-    for(Component c : getAllComponents(frame)) {
-      c.addKeyListener(tkl.getKeyListener());
-    }
+    //rightPanel.add(or.orientationCam.getCanvas3D());
     
     DangerZonaOutputs outputs = robot.hardware.getOutputs();
     DangerZonaInputs inputs = robot.hardware.getInputs();
@@ -95,6 +78,7 @@ public class Dashboard {
     chart.observe(R.var(() -> robot.calcKinematics.get().pos.x), "Pos X");
     chart.observe(R.var(() -> robot.calcKinematics.get().pos.y), "Pos Y");
     chart.observe(R.var(() -> robot.calcKinematics.get().pos.z), "Pos Z");
+    chart.observe(R.var(() -> outputs.missionSwitch.get() ? 1.0 : 0.0), "MissionSwitch");
     
     chart.observe(inputs.frontRight, "FR");
     chart.observe(inputs.frontLeft, "FL");
@@ -105,7 +89,21 @@ public class Dashboard {
     chart.observe(inputs.heaveRearLeft, "Heave RL");
     chart.observe(inputs.heaveRearRight, "Heave RR");
     
-    frame.add(chart.getValuePanel());
+    rightPanel.add(chart.getValuePanel());
+    
+    CameraPanel cp1 = new CameraPanel(robot.hardware.getOutputs().frontCamera.get());
+    CameraPanel cp2 = new CameraPanel(robot.hardware.getOutputs().downCamera.get());
+    
+    cameraPanel.add(cp1);
+    cameraPanel.add(cp2);
+    
+    frame.pack();
+    
+    frame.addKeyListener(tkl.getKeyListener());
+
+    for(Component c : getAllComponents(frame)) {
+      c.addKeyListener(tkl.getKeyListener());
+    }
   }
 
 }

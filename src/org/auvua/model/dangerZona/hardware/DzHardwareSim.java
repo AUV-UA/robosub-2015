@@ -2,6 +2,8 @@ package org.auvua.model.dangerZona.hardware;
 
 import java.util.Random;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.HardLimit;
@@ -20,6 +22,8 @@ public class DzHardwareSim implements DzHardware {
   
   public DangerZonaInputs inputs = new DangerZonaInputs();
   public DangerZonaOutputs outputs = new DangerZonaOutputs();
+  
+  JFrame buttonFrame = new JFrame();
   
   public final RxVar<Double> frontRight = new Delayer(new RateLimiter(new HardLimit(inputs.frontRight, -35.6, 35.6), 35.6 * 2), .02);
   public final RxVar<Double> frontLeft = new Delayer(new RateLimiter(new HardLimit(inputs.frontLeft, -35.6, 35.6), 35.6 * 2), .02);
@@ -107,7 +111,19 @@ public class DzHardwareSim implements DzHardware {
       this.physicsModel.get();
       camera.capture();
     });
-
+    
+    outputs.humidity = R.var(50.0);
+    outputs.missionSwitch = R.var(false);
+    
+    JButton missionSwitch = new JButton("Start/Stop");
+    missionSwitch.addActionListener((event) -> {
+      boolean last = outputs.missionSwitch.get();
+      outputs.missionSwitch.set(!last);
+    });
+    
+    buttonFrame.add(missionSwitch);
+    buttonFrame.setVisible(true);
+    buttonFrame.setSize(200, 150);
   }
 
   @Override

@@ -5,8 +5,8 @@ import jama.Matrix;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.tasks.MotionMode;
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DzMotionTranslator;
 import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
+import org.auvua.model.motion.DzMotionTranslator;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxAccumulator;
 import org.auvua.reactive.core.RxVar;
@@ -30,6 +30,16 @@ public class DzMotionController {
     this.robot = robot;
     this.inputs = robot.hardware.getInputs();
     this.translator = new DzMotionTranslator();
+    
+    force.addSupplier(() -> {
+      Timer.getInstance().get();
+      return new Matrix(3,1);
+    });
+    torque.addSupplier(() -> {
+      Timer.getInstance().get();
+      return new Matrix(3,1);
+    });
+    
     this.start();
   }
   
@@ -40,15 +50,6 @@ public class DzMotionController {
   public void start() {
     if (started) return;
     started = true;
-    
-    force.addSupplier(() -> {
-      Timer.getInstance().get();
-      return new Matrix(3,1);
-    });
-    torque.addSupplier(() -> {
-      Timer.getInstance().get();
-      return new Matrix(3,1);
-    });
     
     RxVar<Matrix> thrustValues = R.var(() -> {
       translator.force = force.get();

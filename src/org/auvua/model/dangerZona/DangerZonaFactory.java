@@ -5,7 +5,6 @@ import org.auvua.model.dangerZona.hardware.DzHardwareReal;
 import org.auvua.model.dangerZona.hardware.DzHardwareSim;
 import org.opencv.core.Core;
 
-
 public class DangerZonaFactory {
   
   public static DangerZona build(RobotType type) {

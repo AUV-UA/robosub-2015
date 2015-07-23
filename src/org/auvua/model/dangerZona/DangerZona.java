@@ -6,15 +6,15 @@ import javax.vecmath.Vector3d;
 import org.auvua.agent.DzMotionController;
 import org.auvua.agent.DzOrientationController;
 import org.auvua.agent.control.Timer;
-import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
 import org.auvua.model.dangerZona.hardware.DzHardware;
+import org.auvua.model.motion.DzMotionTranslator;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
+import org.auvua.view.Dashboard;
 
 public class DangerZona {
   
-  private static DangerZona instance;
-  
+  public final Dashboard dashboard;
   public final DzHardware hardware;
   public final RxVar<DzDerivedKinematics> calcKinematics;
   public final RxVar<DzMotionTranslator> motionTranslator;
@@ -49,20 +49,14 @@ public class DangerZona {
     
     this.motionController = new DzMotionController(this);
     this.orientationController = new DzOrientationController(this);
+    this.dashboard = new Dashboard(this);
   }
   
   public void update() {
     R.doSync(() -> {
       Timer.getInstance().trigger();
       hardware.update();
+      dashboard.update();
     });
-    
-  }
-
-  public static DangerZona getInstance() {
-    if (instance == null) {
-      instance = DangerZonaFactory.build(RobotType.DANGER_ZONA_REAL);
-    }
-    return instance;
   }
 }

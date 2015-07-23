@@ -39,8 +39,6 @@ class CameraView {
       sOff.setPhysicalScreenHeight(400);
     }
 
-    
-
     viewPlatform = new ViewPlatform();
     
     view = new View();

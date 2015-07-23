@@ -6,6 +6,7 @@ import org.auvua.vision.ImageSource;
 public class DangerZonaOutputs {
   public RxVar<Double> depthSensor;
   public RxVar<Double> humidity;
+  public RxVar<Boolean> missionSwitch;
   
   public RxVar<Double> gyroRateX;
   public RxVar<Double> gyroRateY;

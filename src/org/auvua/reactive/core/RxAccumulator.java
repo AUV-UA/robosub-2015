@@ -32,6 +32,12 @@ public class RxAccumulator<E> extends StandardDependency implements Supplier<E> 
     suppliers.remove(supplier);
     determineDependencies();
   }
+  
+  public void removeAllSuppliers() {
+    this.clear();
+    suppliers.clear();
+    determineDependencies();
+  }
 
   @Override
   public void update() {

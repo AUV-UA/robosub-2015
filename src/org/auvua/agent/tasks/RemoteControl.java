@@ -9,23 +9,17 @@ import org.auvua.view.Dashboard;
 public class RemoteControl extends AbstractTask {
   
   private DangerZona robot;
-  private Dashboard dashboard;
   
   public TaskCondition atDepth;
 
   public RemoteControl(DangerZona robot) {
     this.robot = robot;
-    this.dashboard = new Dashboard(robot);
   }
   
   @Override
   public void initialize() {
     DangerZonaInputs inputs = robot.hardware.getInputs();
-    TeleopKeyListener oi = dashboard.tkl;
-    
-    R.task(() -> {
-      dashboard.update();
-    });
+    TeleopKeyListener oi = robot.dashboard.tkl;
     
     inputs.frontRight.setSupplier(() -> 30 * (oi.forward.get() - oi.strafe.get() + oi.rotation.get()));
     inputs.frontLeft.setSupplier(() -> 30 * (oi.forward.get() + oi.strafe.get() - oi.rotation.get()));

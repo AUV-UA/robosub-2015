@@ -95,14 +95,12 @@ public class DangerZonaRenderer {
     JFrame fcFrame = new JFrame();
     fcFrame.add(frontCamera.getCanvas3D());
     fcFrame.setVisible(true);
-    fcFrame.setSize(400, 400);
-    frontCameraComponent = fcFrame.getRootPane();
+    fcFrame.setSize(400, 300);
     
     JFrame dcFrame = new JFrame();
     dcFrame.add(downCamera.getCanvas3D());
     dcFrame.setVisible(true);
-    dcFrame.setSize(400, 400);
-    downCameraComponent = dcFrame.getRootPane();
+    dcFrame.setSize(400, 300);
     
     frontCameraCanvas = frontCamera.getCanvas3D();
     downCameraCanvas = downCamera.getCanvas3D();

@@ -7,8 +7,8 @@ import javax.vecmath.Vector3d;
 import jama.Matrix;
 
 import org.auvua.model.dangerZona.DangerZona;
-import org.auvua.model.dangerZona.DzMotionTranslator;
-import org.auvua.model.dangerZona.DzMotionTranslator.Rotation;
+import org.auvua.model.motion.DzMotionTranslator;
+import org.auvua.model.motion.DzMotionTranslator.Rotation;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 

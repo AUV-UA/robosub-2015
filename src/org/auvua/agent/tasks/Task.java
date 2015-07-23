@@ -30,9 +30,12 @@ public interface Task extends Component {
   }
   
   public static void stopAll() {
-    runningTasks.forEach((task) -> {
-      task.stop();
-    });
+    Set<Task> curr = new HashSet<Task>();
+    curr.addAll(runningTasks);
     runningTasks.clear();
+    
+    for (Task task : curr) {
+      task.stop();
+    }
   };
 }

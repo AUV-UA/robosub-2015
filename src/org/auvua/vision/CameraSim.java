@@ -20,9 +20,9 @@ public class CameraSim implements ImageSource {
     BufferedImage bImage = canvas.getLastImage();
     rawImage = img2Mat(bImage);
     
-    Mat noise = rawImage.clone();
-    Core.randn(noise, 0, 10);
-    Core.add(rawImage, noise, rawImage);
+//    Mat noise = rawImage.clone();
+//    Core.randn(noise, 0, 10);
+//    Core.add(rawImage, noise, rawImage);
   }
   
   public Image getImage() {

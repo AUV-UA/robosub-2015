@@ -1,5 +1,7 @@
 package org.auvua.model.dangerZona;
 
+import org.auvua.model.motion.DzMotionTranslator;
+
 import jama.Matrix;
 
 public class MotionTranslatorMain {

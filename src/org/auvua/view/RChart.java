@@ -1,6 +1,7 @@
 package org.auvua.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -57,6 +58,9 @@ public class RChart extends StandardDependency {
       }
     };
     
+    graphPanel.setPreferredSize(new Dimension(400,300));
+    valuePanel.setPreferredSize(new Dimension(400,300));
+    
     lastTime = Timer.getInstance().get();
   }
 
@@ -83,6 +87,7 @@ public class RChart extends StandardDependency {
           int r = Integer.reverse(i << 1);
           float hue =  1.0f * r / Integer.MAX_VALUE;
           gChart.setColor(new Color(Color.HSBtoRGB(hue, 1, 1)));
+          gValues.setColor(new Color(Color.HSBtoRGB(hue, 1, 1)));
           
           gChart.drawLine(
               (int) (lastTime * pixelsPerSecond % width),
@@ -92,7 +97,7 @@ public class RChart extends StandardDependency {
           
           gChart.clearRect(0, i * 20, 500, 20);
           gValues.drawString(labels.get(var) + ":", 10, 20 + i * 20);
-          gValues.drawString(String.format("%.32f", val), 150, 20 + i * 20);
+          gValues.drawString(String.format("%.8f", val), 150, 20 + i * 20);
         }
         
         lastValues.put(var, val);

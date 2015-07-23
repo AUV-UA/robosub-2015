@@ -35,6 +35,7 @@ public abstract class AbstractTask extends BaseComponent implements Task {
 
   public void stop() {
     if (!started) return;
+    runningTasks.remove(this);
     started = false;
     terminate();
     for(ReactiveDependency dep : newReactiveDependencies) {

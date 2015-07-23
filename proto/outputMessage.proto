@@ -12,4 +12,5 @@ message OutputMessage {
   required double accelZ = 6;
   required double depth = 7;
   required double humidity = 8;
+  required bool mission = 9;
 }
