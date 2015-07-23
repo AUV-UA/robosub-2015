@@ -7,7 +7,6 @@ public class MissionFactory {
   public static Task build(MissionType type, DangerZona robot) {
     AwaitMissionStart awaitStart = new AwaitMissionStart(robot);
     AwaitMissionStop awaitStop = new AwaitMissionStop(robot);
-    DoNothing idle = new DoNothing(robot);
     Task startTask;
     
     switch(type) {
@@ -28,7 +27,6 @@ public class MissionFactory {
     awaitStart.missionStart.triggers(() -> {
       System.out.println("Mission started!");
       awaitStart.stop();
-      idle.stop();
       awaitStop.start();
       startTask.start();
     });
@@ -37,10 +35,9 @@ public class MissionFactory {
       System.out.println("Mission stopped...");
       Task.stopAll();
       awaitStart.start();
-      idle.start();
     });
     
-    return new CompositeTask(awaitStart, idle);
+    return awaitStart;
   }
   
   public enum MissionType {
