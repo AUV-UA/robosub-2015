@@ -87,34 +87,37 @@ public final class OutputMessageProto {
   /**
    * Protobuf type {@code org.auvua.model.dangerZona.hardware.proto.OutputMessage}
    */
-  public  static final class OutputMessage extends
+  public static final class OutputMessage extends
       com.google.protobuf.GeneratedMessage implements
       // @@protoc_insertion_point(message_implements:org.auvua.model.dangerZona.hardware.proto.OutputMessage)
       OutputMessageOrBuilder {
     // Use OutputMessage.newBuilder() to construct.
-    private OutputMessage(com.google.protobuf.GeneratedMessage.Builder builder) {
+    private OutputMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private OutputMessage() {
-      gyroX_ = 0D;
-      gyroY_ = 0D;
-      gyroZ_ = 0D;
-      accelX_ = 0D;
-      accelY_ = 0D;
-      accelZ_ = 0D;
-      depth_ = 0D;
-      humidity_ = 0D;
+    private OutputMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final OutputMessage defaultInstance;
+    public static OutputMessage getDefaultInstance() {
+      return defaultInstance;
     }
 
+    public OutputMessage getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
+        getUnknownFields() {
       return this.unknownFields;
     }
     private OutputMessage(
         com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry) {
-      this();
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
           com.google.protobuf.UnknownFieldSet.newBuilder();
@@ -176,11 +179,10 @@ public final class OutputMessageProto {
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw new RuntimeException(e.setUnfinishedMessage(this));
+        throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new RuntimeException(
-            new com.google.protobuf.InvalidProtocolBufferException(
-                e.getMessage()).setUnfinishedMessage(this));
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -196,6 +198,21 @@ public final class OutputMessageProto {
       return org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.internal_static_org_auvua_model_dangerZona_hardware_proto_OutputMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage.class, org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<OutputMessage> PARSER =
+        new com.google.protobuf.AbstractParser<OutputMessage>() {
+      public OutputMessage parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new OutputMessage(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<OutputMessage> getParserForType() {
+      return PARSER;
     }
 
     private int bitField0_;
@@ -319,6 +336,16 @@ public final class OutputMessageProto {
       return humidity_;
     }
 
+    private void initFields() {
+      gyroX_ = 0D;
+      gyroY_ = 0D;
+      gyroZ_ = 0D;
+      accelX_ = 0D;
+      accelY_ = 0D;
+      accelZ_ = 0D;
+      depth_ = 0D;
+      humidity_ = 0D;
+    }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
@@ -363,6 +390,7 @@ public final class OutputMessageProto {
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeDouble(1, gyroX_);
       }
@@ -387,7 +415,7 @@ public final class OutputMessageProto {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeDouble(8, humidity_);
       }
-      unknownFields.writeTo(output);
+      getUnknownFields().writeTo(output);
     }
 
     private int memoizedSerializedSize = -1;
@@ -428,12 +456,18 @@ public final class OutputMessageProto {
         size += com.google.protobuf.CodedOutputStream
           .computeDoubleSize(8, humidity_);
       }
-      size += unknownFields.getSerializedSize();
+      size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
 
     private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
     public static org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -487,17 +521,12 @@ public final class OutputMessageProto {
       return PARSER.parseFrom(input, extensionRegistry);
     }
 
+    public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
     public static Builder newBuilder(org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+      return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
+    public Builder toBuilder() { return newBuilder(this); }
 
     @java.lang.Override
     protected Builder newBuilderForType(
@@ -538,6 +567,10 @@ public final class OutputMessageProto {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
         }
       }
+      private static Builder create() {
+        return new Builder();
+      }
+
       public Builder clear() {
         super.clear();
         gyroX_ = 0D;
@@ -557,6 +590,10 @@ public final class OutputMessageProto {
         humidity_ = 0D;
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
       }
 
       public com.google.protobuf.Descriptors.Descriptor
@@ -652,34 +689,41 @@ public final class OutputMessageProto {
         if (other.hasHumidity()) {
           setHumidity(other.getHumidity());
         }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
+        this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasGyroX()) {
+          
           return false;
         }
         if (!hasGyroY()) {
+          
           return false;
         }
         if (!hasGyroZ()) {
+          
           return false;
         }
         if (!hasAccelX()) {
+          
           return false;
         }
         if (!hasAccelY()) {
+          
           return false;
         }
         if (!hasAccelZ()) {
+          
           return false;
         }
         if (!hasDepth()) {
+          
           return false;
         }
         if (!hasHumidity()) {
+          
           return false;
         }
         return true;
@@ -963,47 +1007,15 @@ public final class OutputMessageProto {
       // @@protoc_insertion_point(builder_scope:org.auvua.model.dangerZona.hardware.proto.OutputMessage)
     }
 
-    // @@protoc_insertion_point(class_scope:org.auvua.model.dangerZona.hardware.proto.OutputMessage)
-    private static final org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage();
+      defaultInstance = new OutputMessage(true);
+      defaultInstance.initFields();
     }
 
-    public static org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    public static final com.google.protobuf.Parser<OutputMessage> PARSER =
-        new com.google.protobuf.AbstractParser<OutputMessage>() {
-      public OutputMessage parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        try {
-          return new OutputMessage(input, extensionRegistry);
-        } catch (RuntimeException e) {
-          if (e.getCause() instanceof
-              com.google.protobuf.InvalidProtocolBufferException) {
-            throw (com.google.protobuf.InvalidProtocolBufferException)
-                e.getCause();
-          }
-          throw e;
-        }
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<OutputMessage> getParserForType() {
-      return PARSER;
-    }
-
-    public org.auvua.model.dangerZona.hardware.proto.OutputMessageProto.OutputMessage getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
+    // @@protoc_insertion_point(class_scope:org.auvua.model.dangerZona.hardware.proto.OutputMessage)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_org_auvua_model_dangerZona_hardware_proto_OutputMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable

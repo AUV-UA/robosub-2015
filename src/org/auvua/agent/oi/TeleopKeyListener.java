@@ -9,7 +9,7 @@ import org.auvua.agent.control.Timer;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
 
-public class OperatorInterface {
+public class TeleopKeyListener {
   
   private Map<Character,Double> keyStates = new HashMap<Character,Double>();
   private KeyListener listener;
@@ -21,7 +21,7 @@ public class OperatorInterface {
   public RxVar<Double> pitch;
   public RxVar<Double> roll;
   
-  public OperatorInterface() {
+  public TeleopKeyListener() {
     keyStates.put('w', 0.0);
     keyStates.put('a', 0.0);
     keyStates.put('s', 0.0);

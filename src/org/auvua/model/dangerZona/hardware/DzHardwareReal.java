@@ -25,34 +25,38 @@ public class DzHardwareReal implements DzHardware {
   
   public RxVar<InputMessage> inputMessage = R.var(() -> {
     return InputMessage.newBuilder()
-        .setMotor      (FRONT_RIGHT_MOTOR,       inputs.frontRight.get())
-        .setMotor      (FRONT_LEFT_MOTOR,        inputs.frontLeft.get())
-        .setMotor      (REAR_LEFT_MOTOR,         inputs.rearLeft.get())
-        .setMotor      (REAR_RIGHT_MOTOR,        inputs.rearRight.get())
-        .setMotor      (HEAVE_FRONT_RIGHT_MOTOR, inputs.heaveFrontRight.get())
-        .setMotor      (HEAVE_FRONT_LEFT_MOTOR,  inputs.heaveFrontLeft.get())
-        .setMotor      (HEAVE_REAR_LEFT_MOTOR,   inputs.heaveRearLeft.get())
-        .setMotor      (HEAVE_REAR_RIGHT_MOTOR,  inputs.heaveRearRight.get())
-        .setMotor      (8, 0.0)
-        .setMotor      (9, 0.0)
-        .setActuator   (0, false)
-        .setActuator   (1, false)
-        .setActuator   (2, false)
-        .setActuator   (3, false)
-        .setActuator   (4, false)
-        .setActuator   (5, false)
-        .setActuator   (6, false)
-        .setActuator   (7, false)
-        .setActuator   (8, false)
-        .setActuator   (9, false)
-        .setSwitch     (0, false)
-        .setSwitch     (1, false)
-        .setSwitch     (2, false)
-        .setSwitch     (3, false)
-        .setSwitch     (4, false)
-        .setSwitch     (5, false)
-        .setSwitch     (6, false)
-        .setSwitch     (7, false)
+        // 10 PWM Outputs
+        .addMotor      (inputs.frontRight.get())
+        .addMotor      (inputs.frontLeft.get())
+        .addMotor      (inputs.rearLeft.get())
+        .addMotor      (inputs.rearRight.get())
+        .addMotor      (inputs.heaveFrontRight.get())
+        .addMotor      (inputs.heaveFrontLeft.get())
+        .addMotor      (inputs.heaveRearLeft.get())
+        .addMotor      (inputs.heaveRearRight.get())
+        .addMotor      (0.0)
+        .addMotor      (0.0)
+        // 10 Actuators
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        .addActuator   (false)
+        // 8 Switches
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        .addSwitch     (false)
+        // 2 GoPro switches
         .setFrontGoPro (true)
         .setDownGoPro  (true)
         .setLightRed   (0.0)
@@ -79,6 +83,7 @@ public class DzHardwareReal implements DzHardware {
 
   private void createSensors() {
     outputs.depthSensor = R.var(() ->  outputMessage.get().getDepth() );
+    outputs.humidity = R.var(() -> outputMessage.get().getHumidity());
     
     outputs.gyroRateX = R.var(() -> outputMessage.get().getGyroX());
     outputs.gyroRateY = R.var(() -> outputMessage.get().getGyroY());

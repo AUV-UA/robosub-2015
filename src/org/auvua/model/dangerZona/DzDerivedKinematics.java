@@ -6,7 +6,8 @@ import javax.vecmath.Vector3d;
 import org.auvua.agent.control.Timer;
 import org.auvua.model.motion.Orientation;
 
-public class DzCalculatedKinematics {
+public class DzDerivedKinematics {
+  public final Vector3d accel = new Vector3d();
   public final Vector3d vel = new Vector3d();
   public final Vector3d pos = new Vector3d();
   
@@ -16,12 +17,15 @@ public class DzCalculatedKinematics {
   
   private double lastTime = Timer.getInstance().get();
   
-  public DzCalculatedKinematics() {}
+  public DzDerivedKinematics() {}
 
   public void update() {
     double time = Timer.getInstance().get();
     double dt = time - lastTime;
     
+//    Vector3d dVel = new Vector3d(accel);
+//    dVel.scale(dt);
+//    vel.add(dVel);
     Vector3d dPos = new Vector3d(vel);
     dPos.scale(dt);
     translate(dPos);

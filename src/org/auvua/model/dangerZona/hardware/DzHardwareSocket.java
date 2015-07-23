@@ -5,7 +5,7 @@ import org.zeromq.ZMQ.Context;
 import org.zeromq.ZMQ.Socket;
 
 public class DzHardwareSocket {
-  private final String SOCKET_ADDRESS = "tcp://127.0.0.1:5560";
+  private final String SOCKET_ADDRESS = "tcp://192.168.1.31:5560";
   private Context ctx;
   private Socket req;
   

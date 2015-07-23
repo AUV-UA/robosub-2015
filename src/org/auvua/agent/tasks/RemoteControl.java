@@ -1,6 +1,6 @@
 package org.auvua.agent.tasks;
 
-import org.auvua.agent.oi.OperatorInterface;
+import org.auvua.agent.oi.TeleopKeyListener;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
 import org.auvua.reactive.core.R;
@@ -21,7 +21,7 @@ public class RemoteControl extends AbstractTask {
   @Override
   public void initialize() {
     DangerZonaInputs inputs = robot.hardware.getInputs();
-    OperatorInterface oi = dashboard.oi;
+    TeleopKeyListener oi = dashboard.tkl;
     
     R.task(() -> {
       dashboard.update();

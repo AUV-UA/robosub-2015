@@ -15,6 +15,7 @@ import org.auvua.agent.tasks.MissionFactory.MissionType;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
 import org.auvua.model.dangerZona.hardware.DangerZonaOutputs;
+import org.auvua.reactive.core.R;
 import org.auvua.view.RChart;
 
 public class DangerZonaAgent {
@@ -52,11 +53,18 @@ public class DangerZonaAgent {
     
     RChart chart = new RChart(800, 600);
     
-    chart.observe(outputs.depthSensor, "Depth");
-    
     chart.observe(outputs.gyroRateX, "Gyro Rate X");
     chart.observe(outputs.gyroRateY, "Gyro Rate Y");
     chart.observe(outputs.gyroRateZ, "Gyro Rate Z");
+    chart.observe(outputs.accelX, "Accel X");
+    chart.observe(outputs.accelY, "Accel Y");
+    chart.observe(outputs.accelZ, "Accel Z");
+    chart.observe(outputs.depthSensor, "Depth");
+    chart.observe(outputs.humidity, "Humidity");
+    chart.observe(R.var(() -> robot.calcKinematics.get().orientation.getYaw() * 180 / Math.PI), "Yaw");
+    chart.observe(R.var(() -> robot.calcKinematics.get().pos.x), "Pos X");
+    chart.observe(R.var(() -> robot.calcKinematics.get().pos.y), "Pos Y");
+    chart.observe(R.var(() -> robot.calcKinematics.get().pos.z), "Pos Z");
     
     chart.observe(inputs.frontRight, "FR");
     chart.observe(inputs.frontLeft, "FL");

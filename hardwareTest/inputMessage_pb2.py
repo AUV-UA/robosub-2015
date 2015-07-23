@@ -18,7 +18,6 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='inputMessage.proto',
   package='org.auvua.model.dangerZona.hardware.proto',
-  syntax='proto2',
   serialized_pb=_b('\n\x12inputMessage.proto\x12)org.auvua.model.dangerZona.hardware.proto\"\x9f\x01\n\x0cInputMessage\x12\r\n\x05motor\x18\x01 \x03(\x01\x12\x10\n\x08\x61\x63tuator\x18\x02 \x03(\x08\x12\x0e\n\x06switch\x18\x03 \x03(\x08\x12\x12\n\nfrontGoPro\x18\x04 \x02(\x08\x12\x11\n\tdownGoPro\x18\x05 \x02(\x08\x12\x10\n\x08lightRed\x18\x06 \x02(\x01\x12\x12\n\nlightGreen\x18\x07 \x02(\x01\x12\x11\n\tlightBlue\x18\x08 \x02(\x01\x42>\n)org.auvua.model.dangerZona.hardware.protoB\x11InputMessageProto')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -97,7 +96,6 @@ _INPUTMESSAGE = _descriptor.Descriptor(
   ],
   options=None,
   is_extendable=False,
-  syntax='proto2',
   extension_ranges=[],
   oneofs=[
   ],

@@ -33,7 +33,8 @@ public class TestMarkerVision {
   {
     System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 
-    VideoCapture camera = new VideoCapture("/home/auvua/Videos/FloorMarker1.mp4");
+    VideoCapture camera = new VideoCapture(0);
+    //VideoCapture camera = new VideoCapture("/home/auvua/Videos/FloorMarker1.mp4");
     if(!camera.isOpened()){
       System.out.println("Camera Error");
     }

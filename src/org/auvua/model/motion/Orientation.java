@@ -65,6 +65,18 @@ public class Orientation {
     return mat;
   }
   
+  public double getYaw() {
+    return Math.atan2(localY.x, localY.y);
+  }
+  
+  public double getPitch() {
+    return Math.asin(localY.z);
+  }
+  
+  public double getRoll() {
+    return Math.atan2(localY.z, localZ.z);
+  }
+  
   public static Matrix mat3dToMat (Matrix3d mat3d) {
     Matrix mat = new Matrix(new double[][] {
         {mat3d.m00, mat3d.m01, mat3d.m02},
