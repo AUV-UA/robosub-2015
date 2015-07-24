@@ -1,4 +1,4 @@
-package org.auvua.agent.control;
+package org.auvua.agent.utilities;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
+import org.auvua.agent.control.Timer;
 import org.auvua.reactive.core.Variable;
 
 public class DataRecorder {
@@ -62,7 +63,7 @@ public class DataRecorder {
     }
     logger.log(Level.INFO, "\n");
 
-    repeatTimer.schedule(writeTask, 0, 100);
+    repeatTimer.schedule(writeTask, 0, 30);
   }
 
   public void stop() {

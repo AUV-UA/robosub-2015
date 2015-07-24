@@ -20,7 +20,7 @@ public class SitStillMission implements Mission {
     this.robot = robot;
     
     RxVar<Matrix> translate = R.var(new Matrix(new double[][] {
-        {0, 40, 0}
+        {0, 0, 0}
     }).transpose());
     
     MaintainDepth depth1 = new MaintainDepth(robot, R.var(0.5), .05);
@@ -28,7 +28,6 @@ public class SitStillMission implements Mission {
     Translate still = new Translate(robot, translate, 120, MotionMode.ABSOLUTE);
     
     startTask = new CompositeTask(still, depth1);
-    startTask = still;
   }
 
   @Override
