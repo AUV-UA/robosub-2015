@@ -25,6 +25,7 @@ public class DzMotionController {
   private final DzMotionTranslator translator;
   
   private boolean started = false;
+  private boolean paused = false;
   
   public DzMotionController(DangerZona robot) {
     this.robot = robot;
@@ -55,6 +56,10 @@ public class DzMotionController {
       translator.force = force.get();
       translator.torque = torque.get();
       translator.orientation = robot.calcKinematics.get().orientation.asMatrix();
+      
+      if (paused) {
+        return new Matrix(8,1);
+      }
       if (mode == MotionMode.ABSOLUTE) {
         return translator.solveGlobal();
       } else {
@@ -85,6 +90,14 @@ public class DzMotionController {
     inputs.heaveFrontLeft.setSupplier(() -> 0.0);
     inputs.heaveRearLeft.setSupplier(() -> 0.0);
     inputs.heaveRearRight.setSupplier(() -> 0.0);
+  }
+  
+  public void pause() {
+    paused = true;
+  }
+  
+  public void unpause() {
+    paused = false;
   }
   
 }

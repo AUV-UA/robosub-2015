@@ -21,6 +21,7 @@ public class CameraPanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
     Image img = Camera.toBufferedImage(source.getMat());
-    g.drawImage(img, 0, 0, 640, 480, null);
+    if (img != null)
+      g.drawImage(img, 0, 0, 640, 480, null);
   }
 }

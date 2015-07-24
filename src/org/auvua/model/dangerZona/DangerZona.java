@@ -14,7 +14,7 @@ import org.auvua.view.Dashboard;
 
 public class DangerZona {
   
-  public final Dashboard dashboard;
+  public Dashboard dashboard;
   public final DzHardware hardware;
   public final RxVar<DzDerivedKinematics> calcKinematics;
   public final RxVar<DzMotionTranslator> motionTranslator;

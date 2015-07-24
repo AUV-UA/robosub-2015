@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import org.auvua.agent.control.Timer;
 import org.auvua.model.dangerZona.DangerZona;
+import org.auvua.util.MatrixUtil;
 
 public class Translate extends AbstractTask {
 
@@ -37,9 +38,10 @@ public class Translate extends AbstractTask {
   @Override
   public void initialize() {
     startTime = Timer.getInstance().get();
+
+    Matrix or = robot.calcKinematics.get().orientation.asMatrix();
     
     postSupplier = () -> {
-      Matrix or = robot.calcKinematics.get().orientation.asMatrix();
       Matrix pre = preSupplier.get();
       if (this.mode == MotionMode.RELATIVE) {
         return or.times(pre);

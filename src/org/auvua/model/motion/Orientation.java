@@ -85,4 +85,17 @@ public class Orientation {
     });
     return mat;
   }
+  
+  public void setMatrix(Matrix mat) {
+    this.mat = mat;
+    localX.x = mat.get(0, 0);
+    localX.y = mat.get(1, 0);
+    localX.z = mat.get(2, 0);
+    localY.x = mat.get(0, 1);
+    localY.y = mat.get(1, 1);
+    localY.z = mat.get(2, 1);
+    localZ.x = mat.get(0, 2);
+    localZ.y = mat.get(1, 2);
+    localZ.z = mat.get(2, 2);
+  }
 }

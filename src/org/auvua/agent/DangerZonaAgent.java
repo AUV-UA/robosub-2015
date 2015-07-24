@@ -1,6 +1,8 @@
 package org.auvua.agent;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +26,15 @@ public class DangerZonaAgent {
     
     Timer.getInstance().scale(1.0);
     
-    DataRecorder recorder = new DataRecorder("data2.txt");
-    recorder.start();
+    /*
+    R.task(() -> {
+      DzDerivedKinematics kin = robot.calcKinematics.get();
+      Matrix mat = kin.orientation.asMatrix();
+      System.out.println(DzMotionTranslator.mat2str(mat));
+      System.out.println("Yaw: " + kin.orientation.getYaw() * 180 / Math.PI);
+    });
+    */
+    startRecorder();
     
     Timer.getInstance().reset(); // Begin timing
     
@@ -37,6 +46,19 @@ public class DangerZonaAgent {
         }
       }
     }).start();
+  }
+
+  private static void startRecorder() throws SecurityException, IOException {
+    Date date = new Date();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-hh:mm:ss");
+    dateFormat.format(date);
+    
+    DataRecorder recorder = new DataRecorder(String.format("logs/%s.txt", dateFormat.format(date)));
+    recorder.record(robot.hardware.getOutputs().depthSensor, "depth");
+    recorder.record(robot.hardware.getOutputs().gyroRateX, "gyro x");
+    recorder.record(robot.hardware.getOutputs().gyroRateY, "gyro y");
+    recorder.record(robot.hardware.getOutputs().gyroRateZ, "gyro z");
+    recorder.start();
   }
 
 }

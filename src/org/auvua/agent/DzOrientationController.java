@@ -20,6 +20,7 @@ public class DzOrientationController {
   public final RxVar<Matrix> orientation;
   
   private boolean started = false;
+  private boolean paused = false;
   
   public DzOrientationController(DangerZona robot) {
     this.robot = robot;
@@ -46,7 +47,12 @@ public class DzOrientationController {
       Matrix angVelDesired = r.vector.times(r.angle * 1);
       Matrix error = angVelDesired.minus(angVel);
       
-      Matrix out = error.times(1);
+      Matrix out;
+      if (!paused) {
+        out = error.times(200);
+      } else {
+        out = error.times(0);
+      }
       
       return out;
     };
@@ -58,6 +64,14 @@ public class DzOrientationController {
     started = false;
     
     robot.motionController.torque.removeSupplier(torqueSupplier);
+  }
+  
+  public void pause() {
+    paused = true;
+  }
+  
+  public void unpause() {
+    paused = false;
   }
   
 }

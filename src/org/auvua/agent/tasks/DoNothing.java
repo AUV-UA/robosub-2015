@@ -11,13 +11,13 @@ public class DoNothing extends AbstractTask {
   }
   @Override
   public void initialize() {
-    robot.motionController.stop();
-    robot.orientationController.stop();
+    robot.motionController.pause();
+    robot.orientationController.pause();
   }
   @Override
   public void terminate() {
-    robot.motionController.start();
-    robot.orientationController.start();
+    robot.motionController.unpause();
+    robot.orientationController.unpause();
   }
 
 }
