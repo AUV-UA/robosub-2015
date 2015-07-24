@@ -20,7 +20,7 @@ public class Dashboard {
 
   private DangerZona robot;
   public final TeleopKeyListener tkl;
-  public final OrientationRenderer or;
+//  public final OrientationRenderer or;
 
   private JFrame frame;
   private JPanel cameraPanel = new JPanel(new GridLayout(2,1));
@@ -29,12 +29,12 @@ public class Dashboard {
   public Dashboard(DangerZona robot) {
     this.robot = robot;
     this.tkl = new TeleopKeyListener();
-    this.or = new OrientationRenderer(robot.calcKinematics.get().orientation);
+//    this.or = new OrientationRenderer(robot.calcKinematics.get().orientation);
     buildFrame();
   }
 
   public void update() {
-    or.update();
+//    or.update();
     frame.repaint();
   }
 

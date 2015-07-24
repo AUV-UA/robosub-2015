@@ -1,11 +1,12 @@
 package org.auvua.model;
 
+import org.auvua.MissionConfig;
+
 public class MotionUtil {
-  public static double MAX_OUTPUT = .15;
-  
   public static double clamp(double num) {
-    num = num > MAX_OUTPUT ? MAX_OUTPUT : num;
-    num = num < -MAX_OUTPUT ? -MAX_OUTPUT : num;
+    double max = MissionConfig.MAX_OUTPUT;
+    num = num > max ? max : num;
+    num = num < -max ? -max : num;
     return num;
   }
   

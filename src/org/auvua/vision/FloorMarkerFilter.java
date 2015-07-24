@@ -31,12 +31,16 @@ public class FloorMarkerFilter implements ImageFilter {
 
   @Override
   public void filter(Mat image) {
+    image = image.t();
+    Core.flip(image, image, 1);
     
     this.imageCenterX = image.width() / 2;
     this.imageCenterY = image.height() / 2;
+    
+    System.out.println(imageCenterX + " " + imageCenterY);
 
     Imgproc.cvtColor(image, rgb, Imgproc.COLOR_BGR2RGB);
-    Scalar lower = new Scalar( 130, 151, 110 );
+    Scalar lower = new Scalar( 70, 151, 110 );
     Scalar upper = new Scalar( 252, 203, 175 );
 
     Core.inRange(rgb, lower, upper, filtered);
@@ -106,6 +110,11 @@ public class FloorMarkerFilter implements ImageFilter {
     
     this.markerVisible = false;
     this.angle = 0.0;
+  }
+
+  @Override
+  public Mat getImageOut() {
+    return imageOut;
   }
 
 }

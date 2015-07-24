@@ -33,13 +33,14 @@ public class TestMarkerVision {
   {
     System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 
+//    VideoCapture camera = new VideoCapture("/home/auvua/Videos/record2.mp4");
+//    VideoCapture camera = new VideoCapture("/home/auvua/Videos/FloorMarker1.mp4");
     VideoCapture camera = new VideoCapture(0);
-    //VideoCapture camera = new VideoCapture("/home/auvua/Videos/FloorMarker1.mp4");
     if(!camera.isOpened()){
       System.out.println("Camera Error");
     }
     else{
-      System.out.println("Camera OK?");
+      System.out.println("Camera OK");
     }
 
     Mat raw = new Mat();
@@ -96,7 +97,7 @@ public class TestMarkerVision {
       for (int i = 0; i < sliders.length; i++) {
         str += String.format("%-3d ", sliders[i].getValue());
       }
-      System.out.println(str);
+      //System.out.println(str);
       
     Scalar lower = new Scalar( sliders[0].getValue(), sliders[2].getValue(), sliders[4].getValue() );
     Scalar upper = new Scalar( sliders[1].getValue(), sliders[3].getValue(), sliders[5].getValue() );
@@ -123,7 +124,7 @@ public class TestMarkerVision {
           maxRectangularity = rectangularity;
           rectangleCenter = box.center;
           if(box.size.height > box.size.width) {
-            theta = box.angle / 180 * Math.PI;
+            theta = (box.angle + 0) / 180 * Math.PI;
             length = box.size.height;
             width = box.size.width;
           } else {
@@ -131,6 +132,8 @@ public class TestMarkerVision {
             length = box.size.width;
             width = box.size.height;
           }
+          
+          System.out.println(theta * 180 / Math.PI + " degrees");
         }
       }
 

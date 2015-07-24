@@ -36,7 +36,7 @@ public class TestBuoyVision {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		
 		//VideoCapture video = new VideoCapture("buoysVideo");
-		VideoCapture video = new VideoCapture(0);
+		VideoCapture video = new VideoCapture(1);
 
 	    if(!video.isOpened()){
 	        System.out.println("Video Error");
@@ -68,8 +68,6 @@ public class TestBuoyVision {
 	    
 	    gui.setResizable(false);
 	    gui.setSize(800, 800);
-	    
-	    
 	    
 	    while(true) {
 		    Mat frame = new Mat(),

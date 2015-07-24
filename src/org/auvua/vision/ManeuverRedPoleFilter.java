@@ -31,7 +31,7 @@ public class ManeuverRedPoleFilter implements ImageFilter {
 	}
 
 	@Override
-	public Map<String, Object> filter(Mat image) {
+	public void filter(Mat image) {
 		Mat rgb = new Mat(),
 				filtered = new Mat(),
 				edges = new Mat();
@@ -80,12 +80,7 @@ public class ManeuverRedPoleFilter implements ImageFilter {
 			filterOutput.put("poleVisible", false);
 		}
 
-		return filterOutput;
-	}
-
-	@Override
-	public Map<String, Object> getFilterValues() {
-		return filterOutput;
+		return;
 	}
 
 }

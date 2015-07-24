@@ -30,10 +30,10 @@ public class MaintainDepth extends AbstractTask {
   
   @Override
   public void initialize() {
-    Supplier<Double> desiredVelocity = () -> -(desiredDepth.get() - outputs.depthSensor.get()) * .5;
+    Supplier<Double> desiredVelocity = () -> -(desiredDepth.get() - outputs.depthSensor.get()) * 2;
     Supplier<Double> velocity = new Differentiator(new MovingAverageExponential(() -> -outputs.depthSensor.get(), 0.1));
     
-    PidController controller = new PidController(velocity, desiredVelocity, 100, 0, 0);
+    PidController controller = new PidController(velocity, desiredVelocity, 100, 10, 0);
     
     vectorSupplier = () -> {
       return new Matrix(new double[][] {

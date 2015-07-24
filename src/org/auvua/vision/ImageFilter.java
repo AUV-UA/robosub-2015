@@ -4,4 +4,5 @@ import org.opencv.core.Mat;
 
 public interface ImageFilter {
 	public void filter(Mat image);
+	public Mat getImageOut();
 }

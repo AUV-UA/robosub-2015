@@ -34,7 +34,7 @@ public class TestManeuverVision {
 
 //		VideoCapture video = new VideoCapture("maneuverApproach");
 //		VideoCapture video = new VideoCapture("maneuverCircumnavigate");
-		VideoCapture video = new VideoCapture(0);
+		VideoCapture video = new VideoCapture(1);
 
 		if(!video.isOpened()){
 			System.out.println("Video Error");

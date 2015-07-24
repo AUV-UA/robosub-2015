@@ -46,6 +46,12 @@ public class DzMotionTranslator {
       { 0.000,      0.000, 1.000},
   });
   
+  private Matrix inertia = new Matrix(new double[][] {
+      {1, 0, 0},
+      {0, 1, 0},
+      {0, 0, 1},
+  });
+  
   public final Matrix torqueDirections = new Matrix(8,3);
   
   // Additional constraints since system is under-determined
@@ -77,6 +83,8 @@ public class DzMotionTranslator {
   public Matrix solveGlobal() {
     Matrix accelLocal = orientation.transpose().times(force);
     Matrix angAccelLocal = orientation.transpose().times(torque);
+    
+    angAccelLocal = inertia.inverse().times(angAccelLocal);
     
     Matrix motion = new Matrix(8,1);
     motion.setMatrix(0, 2, 0, 0, accelLocal);

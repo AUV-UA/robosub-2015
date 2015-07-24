@@ -18,6 +18,7 @@ public class DzOrientationController {
   
   private Supplier<Matrix> torqueSupplier;
   public final RxVar<Matrix> orientation;
+
   
   private boolean started = false;
   private boolean paused = false;
@@ -44,12 +45,12 @@ public class DzOrientationController {
           {angVelVec.x, angVelVec.y, angVelVec.z}
       }).transpose();
       
-      Matrix angVelDesired = r.vector.times(r.angle * 1);
+      Matrix angVelDesired = r.vector.times(r.angle * 5);
       Matrix error = angVelDesired.minus(angVel);
       
       Matrix out;
       if (!paused) {
-        out = error.times(200);
+        out = error.times(20);
       } else {
         out = error.times(0);
       }

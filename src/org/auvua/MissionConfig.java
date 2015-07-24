@@ -4,8 +4,9 @@ import org.auvua.agent.mission.MissionFactory.MissionType;
 import org.auvua.model.dangerZona.DangerZonaFactory.RobotType;
 
 public class MissionConfig {
-  private static final RobotType ROBOT_TYPE = RobotType.DANGER_ZONA_REAL;
-  private static final MissionType MISSION_TYPE = MissionType.SIT_STILL;
+  public static final RobotType ROBOT_TYPE = RobotType.DANGER_ZONA_REAL;
+  public static final MissionType MISSION_TYPE = MissionType.REMOTE_CONTROL;
+  public static final double MAX_OUTPUT = .15;
   
   public static RobotType getRobotType() {
     return ROBOT_TYPE;
