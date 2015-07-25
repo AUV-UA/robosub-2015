@@ -40,8 +40,14 @@ public class FloorMarkerFilter implements ImageFilter {
     System.out.println(imageCenterX + " " + imageCenterY);
 
     Imgproc.cvtColor(image, rgb, Imgproc.COLOR_BGR2RGB);
-    Scalar lower = new Scalar( 70, 151, 110 );
-    Scalar upper = new Scalar( 252, 203, 175 );
+//    Scalar lower = new Scalar( 70, 151, 110 );
+//    Scalar upper = new Scalar( 252, 203, 175 );
+    
+//    Scalar lower = new Scalar( 109, 78, 69 );
+//    Scalar upper = new Scalar( 146, 143, 108 );
+    
+    Scalar lower = new Scalar( 91, 78, 69 );
+    Scalar upper = new Scalar( 177, 255, 108 );
 
     Core.inRange(rgb, lower, upper, filtered);
 

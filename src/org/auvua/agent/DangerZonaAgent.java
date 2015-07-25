@@ -9,7 +9,7 @@ import java.util.Map;
 import org.auvua.MissionConfig;
 import org.auvua.agent.control.Timer;
 import org.auvua.agent.mission.MissionFactory;
-import org.auvua.agent.tasks.Task;
+import org.auvua.agent.task.Task;
 import org.auvua.agent.utilities.DataRecorder;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.DangerZonaFactory;
@@ -21,10 +21,10 @@ public class DangerZonaAgent {
   
   public static Task command;
   public static Map<Character,Integer> keyMap = new HashMap<Character,Integer>();
-  public static DangerZona robot = DangerZonaFactory.build(MissionConfig.getRobotType());
+  public static DangerZona robot = DangerZonaFactory.build(MissionConfig.ROBOT_TYPE);
 
   public static void main( String[] args ) throws SecurityException, IOException {
-    Task task = MissionFactory.build(MissionConfig.getMissionType(), robot);
+    Task task = MissionFactory.build(MissionConfig.MISSION_TYPE, robot);
     task.start();
     
     Timer.getInstance().scale(1.0);

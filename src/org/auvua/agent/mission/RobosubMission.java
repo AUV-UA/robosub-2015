@@ -2,12 +2,12 @@ package org.auvua.agent.mission;
 
 import jama.Matrix;
 
-import org.auvua.agent.tasks.MaintainDepth;
-import org.auvua.agent.tasks.MotionMode;
-import org.auvua.agent.tasks.OrientRobot;
-import org.auvua.agent.tasks.SearchMoveAndAlign;
-import org.auvua.agent.tasks.Task;
-import org.auvua.agent.tasks.Translate;
+import org.auvua.agent.task.MaintainDepth;
+import org.auvua.agent.task.MotionMode;
+import org.auvua.agent.task.OrientRobot;
+import org.auvua.agent.task.SearchMoveAndAlign;
+import org.auvua.agent.task.Task;
+import org.auvua.agent.task.Translate;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
@@ -40,7 +40,7 @@ public class RobosubMission implements Mission {
     Translate move1 = new Translate(robot, translate, 5, MotionMode.RELATIVE);
     Translate move2 = new Translate(robot, translate, 120, MotionMode.RELATIVE);
     
-    OrientRobot flip = new OrientRobot(robot, flipMat);
+    OrientRobot flip = new OrientRobot(robot, flipMat, MotionMode.ABSOLUTE);
     
     SearchMoveAndAlign sma1 = new SearchMoveAndAlign(robot, translate, 60, MotionMode.RELATIVE);
     SearchMoveAndAlign sma2 = new SearchMoveAndAlign(robot, translate, 60, MotionMode.RELATIVE);

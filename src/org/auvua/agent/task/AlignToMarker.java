@@ -1,4 +1,4 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent.task;
 
 import jama.Matrix;
 
@@ -74,17 +74,17 @@ public class AlignToMarker extends AbstractTask {
     
     alignedCond.setSupplier(() -> {
       FloorMarkerFilter filter = filterVar.get();
-      boolean inCircle = Math.hypot(xPos.get(), yPos.get()) < 30;
+      boolean inCircle = Math.hypot(xPos.get(), yPos.get()) < 50;
       boolean aligned = Math.abs(filter.angle) < Math.PI / 36;
       return filter.markerVisible && inCircle && aligned;
     });
     
     RxVar<Double> xVelSetPoint = R.var(() -> {
-      return (filterVar.get().xPosition - filterVar.get().imageCenterX) / 5;
+      return (filterVar.get().xPosition - filterVar.get().imageCenterX) / 2;
     });
     
     RxVar<Double> yVelSetPoint = R.var(() -> {
-      return (filterVar.get().imageCenterY - filterVar.get().yPosition) / 5;
+      return (filterVar.get().imageCenterY - filterVar.get().yPosition) / 2;
     });
     
     RxVar<Double> zRotSetPoint = R.var(() -> {
@@ -92,9 +92,9 @@ public class AlignToMarker extends AbstractTask {
       return filterVar.get().angle;
     });
     
-    PidController xController = new PidController(xVel2, xVelSetPoint, 1, 0, 0);
-    PidController yController = new PidController(yVel2, yVelSetPoint, 1, 0, 0);
-    PidController rotController = new PidController(robot.hardware.getOutputs().gyroRateZ, zRotSetPoint, 1, 0, 0);
+    PidController xController = new PidController(xVel2, xVelSetPoint, 10, 0, 0);
+    PidController yController = new PidController(yVel2, yVelSetPoint, 10, 0, 0);
+    PidController rotController = new PidController(robot.hardware.getOutputs().gyroRateZ, zRotSetPoint, 10, 0, 0);
     
     forceSupplier = () -> {
       return robot.calcKinematics.get().orientation.asMatrix().times(new Matrix(new double[][] {

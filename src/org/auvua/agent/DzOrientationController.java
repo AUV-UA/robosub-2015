@@ -18,7 +18,9 @@ public class DzOrientationController {
   
   private Supplier<Matrix> torqueSupplier;
   public final RxVar<Matrix> orientation;
-
+  public double lastTime;
+  public Matrix lastAngPosError;
+  public Matrix lastAngVelError;
   
   private boolean started = false;
   private boolean paused = false;
@@ -40,17 +42,19 @@ public class DzOrientationController {
     torqueSupplier = () -> {
       Rotation r = DzMotionTranslator.getRotation(robotOrientation.get(), orientation.get());
       
+      Matrix angPosError = r.vector.times(r.angle);
+      
       Vector3d angVelVec = robot.calcKinematics.get().angVel;
       Matrix angVel = new Matrix(new double[][] {
           {angVelVec.x, angVelVec.y, angVelVec.z}
       }).transpose();
       
-      Matrix angVelDesired = r.vector.times(r.angle * 5);
+      Matrix angVelDesired = r.vector.times(r.angle * 2);
       Matrix error = angVelDesired.minus(angVel);
       
       Matrix out;
       if (!paused) {
-        out = error.times(20);
+        out = error.times(10);
       } else {
         out = error.times(0);
       }

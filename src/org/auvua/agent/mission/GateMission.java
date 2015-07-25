@@ -2,10 +2,10 @@ package org.auvua.agent.mission;
 
 import jama.Matrix;
 
-import org.auvua.agent.tasks.MaintainDepth;
-import org.auvua.agent.tasks.MotionMode;
-import org.auvua.agent.tasks.Task;
-import org.auvua.agent.tasks.Translate;
+import org.auvua.agent.task.MaintainDepth;
+import org.auvua.agent.task.MotionMode;
+import org.auvua.agent.task.Task;
+import org.auvua.agent.task.Translate;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;

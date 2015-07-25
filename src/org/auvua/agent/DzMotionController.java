@@ -3,7 +3,7 @@ package org.auvua.agent;
 import jama.Matrix;
 
 import org.auvua.agent.control.Timer;
-import org.auvua.agent.tasks.MotionMode;
+import org.auvua.agent.task.MotionMode;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.model.dangerZona.hardware.DangerZonaInputs;
 import org.auvua.model.motion.DzMotionTranslator;

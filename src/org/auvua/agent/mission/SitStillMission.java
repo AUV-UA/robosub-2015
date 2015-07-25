@@ -3,12 +3,12 @@ package org.auvua.agent.mission;
 import jama.Matrix;
 
 import org.auvua.agent.control.Timer;
-import org.auvua.agent.tasks.CompositeTask;
-import org.auvua.agent.tasks.MaintainDepth;
-import org.auvua.agent.tasks.MotionMode;
-import org.auvua.agent.tasks.OrientRobot;
-import org.auvua.agent.tasks.Task;
-import org.auvua.agent.tasks.Translate;
+import org.auvua.agent.task.CompositeTask;
+import org.auvua.agent.task.MaintainDepth;
+import org.auvua.agent.task.MotionMode;
+import org.auvua.agent.task.OrientRobot;
+import org.auvua.agent.task.Task;
+import org.auvua.agent.task.Translate;
 import org.auvua.model.dangerZona.DangerZona;
 import org.auvua.reactive.core.R;
 import org.auvua.reactive.core.RxVar;
@@ -74,8 +74,8 @@ public class SitStillMission implements Mission {
     Translate move2 = new Translate(robot, translate2, 3.5, MotionMode.ABSOLUTE);
     Translate still = new Translate(robot, noMove, 120, MotionMode.ABSOLUTE);
     
-    OrientRobot orient1 = new OrientRobot(robot, up);
-    OrientRobot orient2 = new OrientRobot(robot, left);
+    OrientRobot orient1 = new OrientRobot(robot, up, MotionMode.ABSOLUTE);
+    OrientRobot orient2 = new OrientRobot(robot, left, MotionMode.ABSOLUTE);
     
     move1.finished.triggers(() -> {
       move1.stop();

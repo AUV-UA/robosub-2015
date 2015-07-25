@@ -33,9 +33,9 @@ public class TestMarkerVision {
   {
     System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 
-//    VideoCapture camera = new VideoCapture("/home/auvua/Videos/record2.mp4");
+    VideoCapture camera = new VideoCapture("/home/auvua/Videos/record4.mp4");
 //    VideoCapture camera = new VideoCapture("/home/auvua/Videos/FloorMarker1.mp4");
-    VideoCapture camera = new VideoCapture(0);
+//    VideoCapture camera = new VideoCapture(0);
     if(!camera.isOpened()){
       System.out.println("Camera Error");
     }
@@ -52,8 +52,8 @@ public class TestMarkerVision {
     JSlider[] sliders = new JSlider[6];
 
     // RGB
-    int[] initValues = { 130, 252, 151, 203, 110, 175 };
-    
+//    int[] initValues = { 0, 252, 0, 255, 110, 175 };
+    int[] initValues = {109, 146, 78,  143, 69,  108};
     // HSV
 //    int[] initValues = { 25, 55, 15, 35, 65, 85 };
 
@@ -97,7 +97,7 @@ public class TestMarkerVision {
       for (int i = 0; i < sliders.length; i++) {
         str += String.format("%-3d ", sliders[i].getValue());
       }
-      //System.out.println(str);
+      System.out.println(str);
       
     Scalar lower = new Scalar( sliders[0].getValue(), sliders[2].getValue(), sliders[4].getValue() );
     Scalar upper = new Scalar( sliders[1].getValue(), sliders[3].getValue(), sliders[5].getValue() );
@@ -109,7 +109,7 @@ public class TestMarkerVision {
       List<MatOfPoint> contours = new LinkedList<MatOfPoint>();
       Imgproc.findContours(filtered, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
-      double maxRectangularity = 0.7;
+      double maxRectangularity = 0.5;
 
       for (MatOfPoint contour : contours) {
         double area = Imgproc.contourArea(contour);

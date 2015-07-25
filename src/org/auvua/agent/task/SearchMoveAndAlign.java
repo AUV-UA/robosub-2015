@@ -1,4 +1,4 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent.task;
 
 import jama.Matrix;
 

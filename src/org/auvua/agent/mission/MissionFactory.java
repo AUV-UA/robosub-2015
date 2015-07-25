@@ -1,12 +1,12 @@
 package org.auvua.agent.mission;
 
-import org.auvua.agent.tasks.AwaitMissionStart;
-import org.auvua.agent.tasks.AwaitMissionStop;
-import org.auvua.agent.tasks.CompositeTask;
-import org.auvua.agent.tasks.DoNothing;
-import org.auvua.agent.tasks.RemoteControl;
-import org.auvua.agent.tasks.ResetRobot;
-import org.auvua.agent.tasks.Task;
+import org.auvua.agent.task.AwaitMissionStart;
+import org.auvua.agent.task.AwaitMissionStop;
+import org.auvua.agent.task.CompositeTask;
+import org.auvua.agent.task.DoNothing;
+import org.auvua.agent.task.RemoteControl;
+import org.auvua.agent.task.ResetRobot;
+import org.auvua.agent.task.Task;
 import org.auvua.model.dangerZona.DangerZona;
 
 public class MissionFactory {
@@ -30,6 +30,9 @@ public class MissionFactory {
         break;
       case SIT_STILL:
         startTask = new SitStillMission(robot).getStartTask();
+        break;
+      case ALIGN_TO_MARKER:
+        startTask = new AlignToMarkerMission(robot).getStartTask();
         break;
       default:
         startTask = new DoNothing(robot);
@@ -60,6 +63,7 @@ public class MissionFactory {
     GATE_MISSION,
     MAINTAIN_DEPTH,
     REMOTE_CONTROL,
+    ALIGN_TO_MARKER,
     SIT_STILL
   }
 }

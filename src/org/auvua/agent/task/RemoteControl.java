@@ -1,4 +1,4 @@
-package org.auvua.agent.tasks;
+package org.auvua.agent.task;
 
 import org.auvua.agent.oi.TeleopKeyListener;
 import org.auvua.model.dangerZona.DangerZona;

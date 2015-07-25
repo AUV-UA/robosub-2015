@@ -27,7 +27,8 @@ public class Orientation {
     mat = Matrix.identity(3, 3);
   }
   
-  public void rotate(AxisAngle4d aa) {Matrix3d rotation3d = new Matrix3d();
+  public void rotate(AxisAngle4d aa) {
+    Matrix3d rotation3d = new Matrix3d();
     rotation3d.set(aa);
     
     Matrix rotation = mat3dToMat(rotation3d);
@@ -97,5 +98,11 @@ public class Orientation {
     localZ.x = mat.get(0, 2);
     localZ.y = mat.get(1, 2);
     localZ.z = mat.get(2, 2);
+  }
+  
+  public static Matrix axisAngleToMat(double x, double y, double z, double angle) {
+    Matrix3d rotation3d = new Matrix3d();
+    rotation3d.set(new AxisAngle4d(x, y, z, angle));
+    return mat3dToMat(rotation3d);
   }
 }
