@@ -6,17 +6,17 @@ public class MovingAverageExponential implements Supplier<Double>  {
   
   private Supplier<Double> var;
   private double average = 0;
-  private double decay = 0.01;
+  private double inputScale = 0.01;
   
-  public MovingAverageExponential(Supplier<Double> var, double decay) {
+  public MovingAverageExponential(Supplier<Double> var, double inputScale) {
     this.var = var;
-    this.decay = decay;
+    this.inputScale = inputScale;
   }
 
   @Override
   public Double get() {
     double value = var.get();
-    average = decay * value + (1 - decay) * average;
+    average = inputScale * value + (1 - inputScale) * average;
     return average;
   }
 

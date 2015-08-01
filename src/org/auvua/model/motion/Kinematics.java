@@ -1,6 +1,5 @@
 package org.auvua.model.motion;
 
-import javax.media.j3d.Transform3D;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Vector3d;
 
@@ -14,12 +13,18 @@ public class Kinematics {
   public final Vector3d angAccel = new Vector3d();
   public final Vector3d angVel = new Vector3d();
   
-  public final Orientation orientation = new Orientation();
+  public final Orientation orientation;
   
   private double lastTime = Timer.getInstance().get();
   
+  public Kinematics(Vector3d pos, Orientation orientation) {
+    this.pos = pos;
+    this.orientation = orientation;
+  }
+  
   public Kinematics(Vector3d pos) {
     this.pos = pos;
+    this.orientation = new Orientation();
   }
   
   public Kinematics() {

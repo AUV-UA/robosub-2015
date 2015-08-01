@@ -9,48 +9,43 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
 import org.auvua.agent.control.Timer;
+import org.auvua.model.motion.Kinematics;
+import org.auvua.model.motion.Orientation;
 
 public class PhysicsObject {
   
-  public Vector3d accel = new Vector3d();
-  public Vector3d vel = new Vector3d();
-  public Vector3d pos;
-  
-  public Vector3d angAccel = new Vector3d();
-  public Vector3d angVel = new Vector3d();
-  
-  public Vector3d localX = new Vector3d(1,0,0);
-  public Vector3d localY = new Vector3d(0,1,0);
-  public Vector3d localZ = new Vector3d(0,0,1);
+  public Kinematics kinematics;
+  public Drag drag;
+  public MassProperties massProperties;
   
   protected Vector3d locationFromParent;
   
   protected PhysicsObject parent;
   protected List<PhysicsObject> children = new LinkedList<PhysicsObject>();
   
-  protected MassProperties massProperties;
+  private double lastTime = 0.0;
   
-  private double lastTime = Timer.getInstance().get();
-  
-  public PhysicsObject(Vector3d location, MassProperties massProperties) {
-
-    this.pos = location;
-    
-    this.massProperties = massProperties;
+  public PhysicsObject() {
+    this(new Kinematics());
   }
   
+  public PhysicsObject(Kinematics kinematics) {
+    this.kinematics = kinematics;
+    this.massProperties = new MassProperties(0.0, new Matrix3d());
+    this.drag = new Drag(new Vector3d(), new Vector3d(), kinematics);
+  }
+  
+  public PhysicsObject(Kinematics kinematics, MassProperties massProperties, Drag drag) {
+    this.kinematics = kinematics;
+    this.massProperties = massProperties;
+    this.drag = drag;
+  }
+
   public void addChild(PhysicsObject child) {
     children.add(child);
     child.parent = this;
-    Vector3d toChild = new Vector3d();
     
-    Matrix3d transform = new Matrix3d();
-    transform.setColumn(0, localX);
-    transform.setColumn(1, localY);
-    transform.setColumn(2, localZ);
-    transform.transform(child.pos, toChild);
-    
-    child.locationFromParent = toChild;
+    child.locationFromParent = new Vector3d(child.kinematics.pos);
   }
   
   public void addChildren(PhysicsObject ... children) {
@@ -60,48 +55,42 @@ public class PhysicsObject {
   }
   
   public void translate(Vector3d vector) {
-    pos.add(vector);
-    children.forEach((child) -> {
-      child.translate(vector);
-    });
+    kinematics.pos.add(vector);
   }
   
   public void rotate(AxisAngle4d aa) {
-    Transform3D trans = new Transform3D();
-    trans.setRotation(aa);
-    
-    trans.transform(localX);
-    trans.transform(localY);
-    trans.transform(localZ);
-    if (locationFromParent != null) {
-      trans.transform(locationFromParent);
-    }
-    
-    if (parent != null) {
-      pos.add(parent.pos, locationFromParent);
-    }
-    
-    children.forEach((child) -> {
-      child.rotate(aa);
-    });
+    kinematics.orientation.rotate(aa);
   }
   
   public Vector3d getForce() {
     Vector3d force = new Vector3d();
+    force.add(drag.transDrag);
+    
     children.forEach((child) -> {
       force.add(child.getForce());
     });
+    
+    Transform3D transform = new Transform3D();
+    transform.setRotation(kinematics.orientation.asMatrix3d());
+    transform.transform(force);
+    
     return force;
   }
   
   public Vector3d getMoment() {
     Vector3d moment = new Vector3d();
+    moment.add(drag.rotDrag);
+    
     children.forEach((child) -> {
       Vector3d cross = new Vector3d();
       cross.cross(child.locationFromParent, child.getForce());
       moment.add(child.getMoment());
       moment.add(cross);
     });
+    
+    Transform3D transform = new Transform3D();
+    transform.setRotation(kinematics.orientation.asMatrix3d());
+    transform.transform(moment);
     return moment;
   }
   
@@ -122,20 +111,45 @@ public class PhysicsObject {
   }
   
   public void update() {
+    drag.update();
+    
     double time = Timer.getInstance().get();
     double dt = time - lastTime;
     
-    accel = getAcceleration();
-    vel.scaleAdd(dt, accel, vel);
-    Vector3d dPos = new Vector3d(vel);
+    kinematics.accel.set(getAcceleration());
+    kinematics.vel.scaleAdd(dt, kinematics.accel, kinematics.vel);
+    Vector3d dPos = new Vector3d(kinematics.vel);
     dPos.scale(dt);
     translate(dPos);
     
-    angAccel = getAngularAcceleration();
-    angVel.scaleAdd(dt, angAccel, angVel);
-    Vector3d dAngPos = new Vector3d(angVel);
+    kinematics.angAccel.set(getAngularAcceleration());
+    kinematics.angVel.scaleAdd(dt, kinematics.angAccel, kinematics.angVel);
+    Vector3d dAngPos = new Vector3d(kinematics.angVel);
     dAngPos.scale(dt);
     rotate(new AxisAngle4d(dAngPos, dAngPos.length()));
+    
+    //System.out.println(dt + " " + kinematics.angAccel);
+    
+    lastTime = time;
+  }
+  
+  public Orientation getAbsoluteOrientation() {
+    if (parent == null) {
+      return kinematics.orientation;
+    }
+    Matrix3d or = new Matrix3d();
+    or.mul(parent.getAbsoluteOrientation().asMatrix3d(), kinematics.orientation.asMatrix3d());
+    return new Orientation(Orientation.mat3dToMat(or));
+  }
+  
+  public Vector3d getAbsolutePosition() {
+    if (parent == null) {
+      return kinematics.pos;
+    }
+    Vector3d pos = new Vector3d(kinematics.pos);
+    parent.getAbsoluteOrientation().asMatrix3d().transform(pos);
+    pos.add(parent.getAbsolutePosition());
+    return pos;
   }
 
 }

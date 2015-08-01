@@ -2,7 +2,7 @@ package org.auvua.agent;
 
 import java.util.function.Supplier;
 
-import org.auvua.agent.tasks.Task;
+import org.auvua.agent.task.Task;
 import org.auvua.reactive.core.R;
 
 public class SequentialMissionBuilder {

@@ -1,0 +1,16 @@
+package org.auvua.model.dangerZona.hardware.proto;
+
+option java_package = "org.auvua.model.dangerZona.hardware.proto";
+option java_outer_classname = "OutputMessageProto";
+
+message OutputMessage {
+  required double gyroX = 1;
+  required double gyroY = 2;
+  required double gyroZ = 3;
+  required double accelX = 4;
+  required double accelY = 5;
+  required double accelZ = 6;
+  required double depth = 7;
+  required double humidity = 8;
+  required bool mission = 9;
+}

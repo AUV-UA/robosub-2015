@@ -15,7 +15,7 @@ public class Duration extends RxVar<Boolean> {
     this.setSupplier(() -> {
       double time = Timer.getInstance().get();
       if (!supplier.get()) startTime = time;
-      return startTime >= duration;
+      return time >= duration + startTime;
     });
   }
   
